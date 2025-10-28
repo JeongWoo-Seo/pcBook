@@ -8,4 +8,7 @@ proto:
 run:
 	go run main.go
 
-.PHONY: proto run
+test:
+	go test -cover -race ./...
+
+.PHONY: proto run test

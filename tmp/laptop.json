@@ -1,0 +1,61 @@
+{
+  "id": "53066883-566b-4298-b0ac-d7ec66426609",
+  "brand": "Apple",
+  "name": "Macbook Air",
+  "cpu": {
+    "brand": "Intel",
+    "name": "Core i9-11900K",
+    "number_cores": 4,
+    "number_threads": 11,
+    "min_ghz": 2.9872929499708927,
+    "max_ghz": 4.7963669704979175
+  },
+  "ram": {
+    "value": "8",
+    "unit": 5
+  },
+  "gpus": [
+    {
+      "brand": "NVIDIA",
+      "name": "RTX 4080",
+      "min_ghz": 1.450000899141175,
+      "max_ghz": 1.8909584354752818,
+      "memory": {
+        "value": "6",
+        "unit": 5
+      }
+    }
+  ],
+  "storages": [
+    {
+      "driver": 2,
+      "memory": {
+        "value": "433",
+        "unit": 5
+      }
+    },
+    {
+      "driver": 1,
+      "memory": {
+        "value": "743",
+        "unit": 6
+      }
+    }
+  ],
+  "screen": {
+    "size_inch": 16.99496,
+    "resolution": {
+      "width": 2275,
+      "height": 1280
+    },
+    "panel": 2,
+    "multitouch": true
+  },
+  "keyboard": {
+    "layout": 1
+  },
+  "weight_kg": 2.516041359396037,
+  "price": 1282966,
+  "release_year": 2024,
+  "updated_at": "2025-10-28T08:53:01.473792Z"
+}
