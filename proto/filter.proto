@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "github.com/JeongWoo-Seo/pcBook/pb";
+
+import "memory.proto";
+
+message Filter{
+    uint32 max_price = 1;
+    uint32 min_cpu_cores = 2;
+    double min_cpu_ghz = 3;
+    Memory min_ram = 4;
+}

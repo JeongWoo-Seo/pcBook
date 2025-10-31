@@ -7,6 +7,7 @@ import (
 
 	"github.com/JeongWoo-Seo/pcBook/pb"
 	"github.com/google/uuid"
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -59,4 +60,27 @@ func (s *LaptopServer) CreateLaptop(ctx context.Context, req *pb.CreateLaptopReq
 	}
 
 	return res, nil
+}
+
+func (s *LaptopServer) SearchLaptop(req *pb.SearchLaptopRequest, stream grpc.ServerStreamingServer[pb.SearchLaptopResponse]) error {
+	filter := req.GetFilter()
+	log.Printf("receive a search laptop with filter : %v", filter)
+
+	err := s.Store.Search(stream.Context(), filter, func(laptop *pb.Laptop) error {
+		res := &pb.SearchLaptopResponse{Laptop: laptop}
+
+		err := stream.Send(res)
+		if err != nil {
+			return err
+		}
+
+		log.Printf("send laptop with id: %s", laptop.GetId())
+		return nil
+	})
+
+	if err != nil {
+		return status.Errorf(codes.Internal, "unexpected error: %v", err)
+	}
+
+	return nil
 }

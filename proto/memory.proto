@@ -10,7 +10,7 @@ message Memory{
         BIT = 1;
         BYTE = 2;
         KILOBYTE = 3;
-        MEFABYTE = 4;
+        MEGABYTE = 4;
         GIGABYTE = 5;
         TERABYTE = 6;
     }

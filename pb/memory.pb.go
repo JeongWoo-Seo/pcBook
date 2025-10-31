@@ -28,7 +28,7 @@ const (
 	Memory_BIT      Memory_Unit = 1
 	Memory_BYTE     Memory_Unit = 2
 	Memory_KILOBYTE Memory_Unit = 3
-	Memory_MEFABYTE Memory_Unit = 4
+	Memory_MEGABYTE Memory_Unit = 4
 	Memory_GIGABYTE Memory_Unit = 5
 	Memory_TERABYTE Memory_Unit = 6
 )
@@ -40,7 +40,7 @@ var (
 		1: "BIT",
 		2: "BYTE",
 		3: "KILOBYTE",
-		4: "MEFABYTE",
+		4: "MEGABYTE",
 		5: "GIGABYTE",
 		6: "TERABYTE",
 	}
@@ -49,7 +49,7 @@ var (
 		"BIT":      1,
 		"BYTE":     2,
 		"KILOBYTE": 3,
-		"MEFABYTE": 4,
+		"MEGABYTE": 4,
 		"GIGABYTE": 5,
 		"TERABYTE": 6,
 	}
@@ -147,7 +147,7 @@ const file_memory_proto_rawDesc = "" +
 	"\x03BIT\x10\x01\x12\b\n" +
 	"\x04BYTE\x10\x02\x12\f\n" +
 	"\bKILOBYTE\x10\x03\x12\f\n" +
-	"\bMEFABYTE\x10\x04\x12\f\n" +
+	"\bMEGABYTE\x10\x04\x12\f\n" +
 	"\bGIGABYTE\x10\x05\x12\f\n" +
 	"\bTERABYTE\x10\x06B#Z!github.com/JeongWoo-Seo/pcBook/pbb\x06proto3"
 
