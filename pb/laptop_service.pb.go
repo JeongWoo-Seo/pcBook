@@ -197,6 +197,192 @@ func (x *SearchLaptopResponse) GetLaptop() *Laptop {
 	return nil
 }
 
+type UploadImageRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to Data:
+	//
+	//	*UploadImageRequest_Info
+	//	*UploadImageRequest_ChunkData
+	Data          isUploadImageRequest_Data `protobuf_oneof:"data"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UploadImageRequest) Reset() {
+	*x = UploadImageRequest{}
+	mi := &file_laptop_service_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UploadImageRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UploadImageRequest) ProtoMessage() {}
+
+func (x *UploadImageRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_laptop_service_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UploadImageRequest.ProtoReflect.Descriptor instead.
+func (*UploadImageRequest) Descriptor() ([]byte, []int) {
+	return file_laptop_service_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *UploadImageRequest) GetData() isUploadImageRequest_Data {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+func (x *UploadImageRequest) GetInfo() *ImageInfo {
+	if x != nil {
+		if x, ok := x.Data.(*UploadImageRequest_Info); ok {
+			return x.Info
+		}
+	}
+	return nil
+}
+
+func (x *UploadImageRequest) GetChunkData() []byte {
+	if x != nil {
+		if x, ok := x.Data.(*UploadImageRequest_ChunkData); ok {
+			return x.ChunkData
+		}
+	}
+	return nil
+}
+
+type isUploadImageRequest_Data interface {
+	isUploadImageRequest_Data()
+}
+
+type UploadImageRequest_Info struct {
+	Info *ImageInfo `protobuf:"bytes,1,opt,name=info,proto3,oneof"`
+}
+
+type UploadImageRequest_ChunkData struct {
+	ChunkData []byte `protobuf:"bytes,2,opt,name=chunk_data,json=chunkData,proto3,oneof"`
+}
+
+func (*UploadImageRequest_Info) isUploadImageRequest_Data() {}
+
+func (*UploadImageRequest_ChunkData) isUploadImageRequest_Data() {}
+
+type ImageInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	LaptopId      string                 `protobuf:"bytes,1,opt,name=laptop_id,json=laptopId,proto3" json:"laptop_id,omitempty"`
+	ImageType     string                 `protobuf:"bytes,2,opt,name=image_type,json=imageType,proto3" json:"image_type,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ImageInfo) Reset() {
+	*x = ImageInfo{}
+	mi := &file_laptop_service_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ImageInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ImageInfo) ProtoMessage() {}
+
+func (x *ImageInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_laptop_service_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ImageInfo.ProtoReflect.Descriptor instead.
+func (*ImageInfo) Descriptor() ([]byte, []int) {
+	return file_laptop_service_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *ImageInfo) GetLaptopId() string {
+	if x != nil {
+		return x.LaptopId
+	}
+	return ""
+}
+
+func (x *ImageInfo) GetImageType() string {
+	if x != nil {
+		return x.ImageType
+	}
+	return ""
+}
+
+type UploadImageResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Size          uint32                 `protobuf:"varint,2,opt,name=size,proto3" json:"size,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UploadImageResponse) Reset() {
+	*x = UploadImageResponse{}
+	mi := &file_laptop_service_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UploadImageResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UploadImageResponse) ProtoMessage() {}
+
+func (x *UploadImageResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_laptop_service_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UploadImageResponse.ProtoReflect.Descriptor instead.
+func (*UploadImageResponse) Descriptor() ([]byte, []int) {
+	return file_laptop_service_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *UploadImageResponse) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *UploadImageResponse) GetSize() uint32 {
+	if x != nil {
+		return x.Size
+	}
+	return 0
+}
+
 var File_laptop_service_proto protoreflect.FileDescriptor
 
 const file_laptop_service_proto_rawDesc = "" +
@@ -212,10 +398,23 @@ const file_laptop_service_proto_rawDesc = "" +
 	".pb.FilterR\x06filter\":\n" +
 	"\x14SearchLaptopResponse\x12\"\n" +
 	"\x06laptop\x18\x01 \x01(\v2\n" +
-	".pb.LaptopR\x06laptop2\x9b\x01\n" +
+	".pb.LaptopR\x06laptop\"b\n" +
+	"\x12UploadImageRequest\x12#\n" +
+	"\x04info\x18\x01 \x01(\v2\r.pb.ImageInfoH\x00R\x04info\x12\x1f\n" +
+	"\n" +
+	"chunk_data\x18\x02 \x01(\fH\x00R\tchunkDataB\x06\n" +
+	"\x04data\"G\n" +
+	"\tImageInfo\x12\x1b\n" +
+	"\tlaptop_id\x18\x01 \x01(\tR\blaptopId\x12\x1d\n" +
+	"\n" +
+	"image_type\x18\x02 \x01(\tR\timageType\"9\n" +
+	"\x13UploadImageResponse\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
+	"\x04size\x18\x02 \x01(\rR\x04size2\xdf\x01\n" +
 	"\rLaptopService\x12C\n" +
 	"\fCreateLaptop\x12\x17.pb.CreateLaptopRequest\x1a\x18.pb.CreateLaptopResponse\"\x00\x12E\n" +
-	"\fSearchLaptop\x12\x17.pb.SearchLaptopRequest\x1a\x18.pb.SearchLaptopResponse\"\x000\x01B#Z!github.com/JeongWoo-Seo/pcBook/pbb\x06proto3"
+	"\fSearchLaptop\x12\x17.pb.SearchLaptopRequest\x1a\x18.pb.SearchLaptopResponse\"\x000\x01\x12B\n" +
+	"\vUploadImage\x12\x16.pb.UploadImageRequest\x1a\x17.pb.UploadImageResponse\"\x00(\x01B#Z!github.com/JeongWoo-Seo/pcBook/pbb\x06proto3"
 
 var (
 	file_laptop_service_proto_rawDescOnce sync.Once
@@ -229,28 +428,34 @@ func file_laptop_service_proto_rawDescGZIP() []byte {
 	return file_laptop_service_proto_rawDescData
 }
 
-var file_laptop_service_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_laptop_service_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_laptop_service_proto_goTypes = []any{
 	(*CreateLaptopRequest)(nil),  // 0: pb.CreateLaptopRequest
 	(*CreateLaptopResponse)(nil), // 1: pb.CreateLaptopResponse
 	(*SearchLaptopRequest)(nil),  // 2: pb.SearchLaptopRequest
 	(*SearchLaptopResponse)(nil), // 3: pb.SearchLaptopResponse
-	(*Laptop)(nil),               // 4: pb.Laptop
-	(*Filter)(nil),               // 5: pb.Filter
+	(*UploadImageRequest)(nil),   // 4: pb.UploadImageRequest
+	(*ImageInfo)(nil),            // 5: pb.ImageInfo
+	(*UploadImageResponse)(nil),  // 6: pb.UploadImageResponse
+	(*Laptop)(nil),               // 7: pb.Laptop
+	(*Filter)(nil),               // 8: pb.Filter
 }
 var file_laptop_service_proto_depIdxs = []int32{
-	4, // 0: pb.CreateLaptopRequest.laptop:type_name -> pb.Laptop
-	5, // 1: pb.SearchLaptopRequest.filter:type_name -> pb.Filter
-	4, // 2: pb.SearchLaptopResponse.laptop:type_name -> pb.Laptop
-	0, // 3: pb.LaptopService.CreateLaptop:input_type -> pb.CreateLaptopRequest
-	2, // 4: pb.LaptopService.SearchLaptop:input_type -> pb.SearchLaptopRequest
-	1, // 5: pb.LaptopService.CreateLaptop:output_type -> pb.CreateLaptopResponse
-	3, // 6: pb.LaptopService.SearchLaptop:output_type -> pb.SearchLaptopResponse
-	5, // [5:7] is the sub-list for method output_type
-	3, // [3:5] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	7, // 0: pb.CreateLaptopRequest.laptop:type_name -> pb.Laptop
+	8, // 1: pb.SearchLaptopRequest.filter:type_name -> pb.Filter
+	7, // 2: pb.SearchLaptopResponse.laptop:type_name -> pb.Laptop
+	5, // 3: pb.UploadImageRequest.info:type_name -> pb.ImageInfo
+	0, // 4: pb.LaptopService.CreateLaptop:input_type -> pb.CreateLaptopRequest
+	2, // 5: pb.LaptopService.SearchLaptop:input_type -> pb.SearchLaptopRequest
+	4, // 6: pb.LaptopService.UploadImage:input_type -> pb.UploadImageRequest
+	1, // 7: pb.LaptopService.CreateLaptop:output_type -> pb.CreateLaptopResponse
+	3, // 8: pb.LaptopService.SearchLaptop:output_type -> pb.SearchLaptopResponse
+	6, // 9: pb.LaptopService.UploadImage:output_type -> pb.UploadImageResponse
+	7, // [7:10] is the sub-list for method output_type
+	4, // [4:7] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_laptop_service_proto_init() }
@@ -260,13 +465,17 @@ func file_laptop_service_proto_init() {
 	}
 	file_laptop_proto_init()
 	file_filter_proto_init()
+	file_laptop_service_proto_msgTypes[4].OneofWrappers = []any{
+		(*UploadImageRequest_Info)(nil),
+		(*UploadImageRequest_ChunkData)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_laptop_service_proto_rawDesc), len(file_laptop_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

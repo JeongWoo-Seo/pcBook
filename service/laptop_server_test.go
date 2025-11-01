@@ -26,34 +26,34 @@ func TestLaptopServer(t *testing.T) {
 	require.NoError(t, err)
 
 	testCases := []struct {
-		name   string
-		laptop *pb.Laptop
-		store  LaptopStore
-		code   codes.Code
+		name        string
+		laptop      *pb.Laptop
+		laptopstore LaptopStore
+		code        codes.Code
 	}{
 		{
-			name:   "ok",
-			laptop: util.NewLaptop(),
-			store:  NewInMemoryLaptopStore(),
-			code:   codes.OK,
+			name:        "ok",
+			laptop:      util.NewLaptop(),
+			laptopstore: NewInMemoryLaptopStore(),
+			code:        codes.OK,
 		},
 		{
-			name:   "no_id",
-			laptop: laptopNoId,
-			store:  NewInMemoryLaptopStore(),
-			code:   codes.OK,
+			name:        "no_id",
+			laptop:      laptopNoId,
+			laptopstore: NewInMemoryLaptopStore(),
+			code:        codes.OK,
 		},
 		{
-			name:   "invalid_id",
-			laptop: laptopInvalidId,
-			store:  NewInMemoryLaptopStore(),
-			code:   codes.InvalidArgument,
+			name:        "invalid_id",
+			laptop:      laptopInvalidId,
+			laptopstore: NewInMemoryLaptopStore(),
+			code:        codes.InvalidArgument,
 		},
 		{
-			name:   "duplicate_id",
-			laptop: laptopDuplicateId,
-			store:  storeDuplicateId,
-			code:   codes.AlreadyExists,
+			name:        "duplicate_id",
+			laptop:      laptopDuplicateId,
+			laptopstore: storeDuplicateId,
+			code:        codes.AlreadyExists,
 		},
 	}
 
@@ -66,7 +66,7 @@ func TestLaptopServer(t *testing.T) {
 				Laptop: tc.laptop,
 			}
 
-			server := NewLaptopServer(tc.store)
+			server := NewLaptopServer(tc.laptopstore, nil)
 			res, err := server.CreateLaptop(context.Background(), req)
 			if tc.code == codes.OK {
 				require.NoError(t, err)

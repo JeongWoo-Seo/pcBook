@@ -1,8 +1,10 @@
 package service
 
 import (
+	"bytes"
 	"context"
 	"errors"
+	"io"
 	"log"
 
 	"github.com/JeongWoo-Seo/pcBook/pb"
@@ -12,13 +14,21 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+const (
+	maxImageSize = 1 << 20
+)
+
 type LaptopServer struct {
 	pb.UnimplementedLaptopServiceServer
-	Store LaptopStore
+	LaptopStore LaptopStore
+	ImageStore  ImageStore
 }
 
-func NewLaptopServer(store LaptopStore) *LaptopServer {
-	return &LaptopServer{Store: store}
+func NewLaptopServer(laptopStore LaptopStore, imageStore ImageStore) *LaptopServer {
+	return &LaptopServer{
+		LaptopStore: laptopStore,
+		ImageStore:  imageStore,
+	}
 }
 
 func (s *LaptopServer) CreateLaptop(ctx context.Context, req *pb.CreateLaptopRequest) (*pb.CreateLaptopResponse, error) {
@@ -39,12 +49,11 @@ func (s *LaptopServer) CreateLaptop(ctx context.Context, req *pb.CreateLaptopReq
 		laptop.Id = id.String()
 	}
 
-	if ctx.Err() != nil {
-		log.Printf("context error detected: %v", ctx.Err())
-		return nil, status.Error(codes.DeadlineExceeded, "deadline is exceeded or canceled by client")
+	if err := contextError(ctx); err != nil {
+		return nil, err
 	}
 
-	err := s.Store.Save(laptop)
+	err := s.LaptopStore.Save(laptop)
 	if err != nil {
 		code := codes.Internal
 		if errors.Is(err, ErrAlreadyExists) {
@@ -66,7 +75,7 @@ func (s *LaptopServer) SearchLaptop(req *pb.SearchLaptopRequest, stream grpc.Ser
 	filter := req.GetFilter()
 	log.Printf("receive a search laptop with filter : %v", filter)
 
-	err := s.Store.Search(stream.Context(), filter, func(laptop *pb.Laptop) error {
+	err := s.LaptopStore.Search(stream.Context(), filter, func(laptop *pb.Laptop) error {
 		res := &pb.SearchLaptopResponse{Laptop: laptop}
 
 		err := stream.Send(res)
@@ -83,4 +92,90 @@ func (s *LaptopServer) SearchLaptop(req *pb.SearchLaptopRequest, stream grpc.Ser
 	}
 
 	return nil
+}
+
+func (s *LaptopServer) UploadImage(stream grpc.ClientStreamingServer[pb.UploadImageRequest, pb.UploadImageResponse]) error {
+	req, err := stream.Recv()
+	if err != nil {
+		return logErr(status.Errorf(codes.Unknown, "can not recieve image info"))
+	}
+
+	laptopID := req.GetInfo().GetLaptopId()
+	imageType := req.GetInfo().GetImageType()
+	log.Printf("recieve an image for laptop %s ", laptopID)
+
+	laptop, err := s.LaptopStore.Find(laptopID)
+	if err != nil {
+		return logErr(status.Errorf(codes.Internal, "can not find laptop: %v", err))
+	}
+	if laptop == nil {
+		return logErr(status.Errorf(codes.InvalidArgument, "laptop %s no exist", laptopID))
+	}
+
+	imageData := bytes.Buffer{}
+	imagesie := 0
+
+	for {
+		if err := contextError(stream.Context()); err != nil {
+			return err
+		}
+		req, err := stream.Recv()
+		if err == io.EOF {
+			log.Print("no more data")
+			break
+		}
+		if err != nil {
+			return logErr(status.Errorf(codes.Unknown, "can not recieve chunk data: %v", err))
+		}
+
+		chunk := req.GetChunkData()
+		size := len(chunk)
+
+		imagesie += size
+		if imagesie > maxImageSize {
+			return logErr(status.Errorf(codes.InvalidArgument, "image is to large: %d > %d", imagesie, maxImageSize))
+		}
+
+		_, err = imageData.Write(chunk)
+		if err != nil {
+			return logErr(status.Errorf(codes.Internal, "failed to write data: %v", err))
+		}
+	}
+
+	imageId, err := s.ImageStore.Save(laptopID, imageType, imageData)
+	if err != nil {
+		return logErr(status.Errorf(codes.Internal, "can not save image data to store: %v", err))
+	}
+
+	res := &pb.UploadImageResponse{
+		Id:   imageId,
+		Size: uint32(imagesie),
+	}
+
+	err = stream.SendAndClose(res)
+	if err != nil {
+		return logErr(status.Errorf(codes.Unknown, "failed to send res: %v", err))
+	}
+
+	log.Printf("saved image with id: %s", imageId)
+	return nil
+}
+
+func logErr(err error) error {
+	if err != nil {
+		log.Print(err)
+	}
+
+	return err
+}
+
+func contextError(ctx context.Context) error {
+	switch ctx.Err() {
+	case context.Canceled:
+		return logErr(status.Error(codes.Canceled, "canceled by client"))
+	case context.DeadlineExceeded:
+		return logErr(status.Error(codes.DeadlineExceeded, "req  DeadlineExceeded"))
+	default:
+		return nil
+	}
 }

@@ -1,10 +1,13 @@
 package main
 
 import (
+	"bufio"
 	"context"
 	"flag"
 	"io"
 	"log"
+	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/JeongWoo-Seo/pcBook/pb"
@@ -26,9 +29,16 @@ func main() {
 	}
 
 	laptopClient := pb.NewLaptopServiceClient(con)
+	testUploadImage(laptopClient)
+}
 
+func testCreateLaptop(laptopClient pb.LaptopServiceClient) {
+	CreateLaptop(laptopClient, util.NewLaptop())
+}
+
+func testSearchLaptop(laptopClient pb.LaptopServiceClient) {
 	for i := 0; i < 10; i++ {
-		CreateLaptop(laptopClient)
+		CreateLaptop(laptopClient, util.NewLaptop())
 	}
 
 	filter := &pb.Filter{
@@ -43,8 +53,74 @@ func main() {
 	SearchLaptop(laptopClient, filter)
 }
 
-func CreateLaptop(laptopClient pb.LaptopServiceClient) {
+func uploadImage(laptopClient pb.LaptopServiceClient, laptopID string, imagePath string) {
+	file, err := os.Open(imagePath)
+	if err != nil {
+		log.Fatal("can not open image file: ", err)
+	}
+	defer file.Close()
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	stream, err := laptopClient.UploadImage(ctx)
+	if err != nil {
+		log.Fatal("failed to upload file: ", err)
+	}
+
+	req := &pb.UploadImageRequest{
+		Data: &pb.UploadImageRequest_Info{
+			Info: &pb.ImageInfo{
+				LaptopId:  laptopID,
+				ImageType: filepath.Ext(imagePath),
+			},
+		},
+	}
+
+	err = stream.Send(req)
+	if err != nil {
+		log.Fatal("can not send image info: ", err)
+	}
+
+	reader := bufio.NewReader(file)
+	buffer := make([]byte, 1024)
+
+	for {
+		n, err := reader.Read(buffer)
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Fatal("can not read chunk to buff: ", err)
+		}
+
+		req := &pb.UploadImageRequest{
+			Data: &pb.UploadImageRequest_ChunkData{
+				ChunkData: buffer[:n],
+			},
+		}
+
+		err = stream.Send(req)
+		if err != nil {
+			log.Fatal("can not send chunk to server: ", err)
+		}
+	}
+
+	res, err := stream.CloseAndRecv()
+	if err != nil {
+		log.Fatal("can not recieve res: ", err)
+	}
+
+	log.Printf("image upload with id: %s", res.GetId())
+}
+
+func testUploadImage(laptopClient pb.LaptopServiceClient) {
 	laptop := util.NewLaptop()
+	CreateLaptop(laptopClient, laptop)
+	uploadImage(laptopClient, laptop.Id, "tmp/laptop.png")
+}
+
+func CreateLaptop(laptopClient pb.LaptopServiceClient, laptop *pb.Laptop) {
 	req := &pb.CreateLaptopRequest{
 		Laptop: laptop,
 	}
