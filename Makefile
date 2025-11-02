@@ -2,7 +2,7 @@ proto:
 	rm ./pb/*.go || true
 	protoc --proto_path=./proto \
        --go_out=paths=source_relative:./pb \
-       --go-grpc_out=paths=source_relative,require_unimplemented_servers=false:./pb \
+       --go-grpc_out=paths=source_relative:./pb \
        ./proto/*.proto
 
 server:

@@ -22,12 +22,14 @@ type LaptopServer struct {
 	pb.UnimplementedLaptopServiceServer
 	LaptopStore LaptopStore
 	ImageStore  ImageStore
+	RatingStore RatingStore
 }
 
-func NewLaptopServer(laptopStore LaptopStore, imageStore ImageStore) *LaptopServer {
+func NewLaptopServer(laptopStore LaptopStore, imageStore ImageStore, ratingStore RatingStore) *LaptopServer {
 	return &LaptopServer{
 		LaptopStore: laptopStore,
 		ImageStore:  imageStore,
+		RatingStore: ratingStore,
 	}
 }
 
@@ -158,6 +160,53 @@ func (s *LaptopServer) UploadImage(stream grpc.ClientStreamingServer[pb.UploadIm
 	}
 
 	log.Printf("saved image with id: %s", imageId)
+	return nil
+}
+
+func (s *LaptopServer) RateLaptop(stream grpc.BidiStreamingServer[pb.RateLaptopRequest, pb.RateLaptopResponse]) error {
+
+	for {
+		if err := contextError(stream.Context()); err != nil {
+			return err
+		}
+		req, err := stream.Recv()
+		if err == io.EOF {
+			log.Print("no more data")
+			break
+		}
+		if err != nil {
+			return logErr(status.Errorf(codes.Unknown, "can not recieve data: %v", err))
+		}
+
+		laptopID := req.GetLaptopId()
+		score := req.GetScore()
+
+		log.Printf("recieve rate laptop request: id = %s", laptopID)
+
+		found, err := s.LaptopStore.Find(laptopID)
+		if err != nil {
+			return logErr(status.Errorf(codes.Internal, "can not find laptop: %v", err))
+		}
+		if found == nil {
+			return logErr(status.Errorf(codes.NotFound, "laptop %s no exist", laptopID))
+		}
+
+		rating, err := s.RatingStore.Add(laptopID, score)
+		if err != nil {
+			return logErr(status.Errorf(codes.Internal, "can not add rating: %v", err))
+		}
+
+		res := &pb.RateLaptopResponse{
+			LaptopId:     laptopID,
+			RatedCount:   rating.Count,
+			AverageScore: rating.sum / float64(rating.Count),
+		}
+
+		err = stream.Send(res)
+		if err != nil {
+			return logErr(status.Errorf(codes.Unknown, "can not send stream: %v", err))
+		}
+	}
 	return nil
 }
 

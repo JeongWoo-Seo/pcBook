@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"context"
 	"flag"
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -29,7 +30,8 @@ func main() {
 	}
 
 	laptopClient := pb.NewLaptopServiceClient(con)
-	testUploadImage(laptopClient)
+	//testUploadImage(laptopClient)
+	testRatingLaptop(laptopClient)
 }
 
 func testCreateLaptop(laptopClient pb.LaptopServiceClient) {
@@ -172,5 +174,85 @@ func SearchLaptop(laptopClient pb.LaptopServiceClient, filter *pb.Filter) {
 		log.Print("  + ram: ", laptop.GetRam())
 		log.Print("  + price: ", laptop.GetPrice())
 	}
+}
 
+func ratingLaptop(laptopClient pb.LaptopServiceClient, laptopIDs []string, scores []float64) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	stream, err := laptopClient.RateLaptop(ctx)
+	if err != nil {
+		return fmt.Errorf("can not rate laptop: %v", err)
+	}
+
+	waitResponse := make(chan error)
+
+	go func() {
+		for {
+			res, err := stream.Recv()
+			if err == io.EOF {
+				log.Print("no more res")
+				waitResponse <- nil
+				return
+			}
+			if err != nil {
+				waitResponse <- fmt.Errorf("can not recieve stream res: %v", err)
+				return
+			}
+			log.Print("recieve res: ", res)
+		}
+	}()
+
+	for i, laptopID := range laptopIDs {
+		req := &pb.RateLaptopRequest{
+			LaptopId: laptopID,
+			Score:    scores[i],
+		}
+
+		err := stream.Send(req)
+		if err != nil {
+			return fmt.Errorf("can not send req: %v", err)
+		}
+
+		log.Print("send req: ", req)
+	}
+
+	err = stream.CloseSend()
+	if err != nil {
+		return fmt.Errorf("can not close send: %v", err)
+	}
+
+	err = <-waitResponse
+	return err
+}
+
+func testRatingLaptop(laptopClient pb.LaptopServiceClient) {
+	n := 3
+	laptopIDs := make([]string, 3)
+
+	for i := 0; i < n; i++ {
+		laptop := util.NewLaptop()
+		laptopIDs[i] = laptop.Id
+		CreateLaptop(laptopClient, laptop)
+	}
+
+	scores := make([]float64, n)
+	for {
+		fmt.Print("rate (y/n)? ")
+		var answer string
+		fmt.Scan(&answer)
+
+		if answer != "y" {
+			break
+		}
+
+		for i := 0; i < n; i++ {
+			scores[i] = util.RandomLaptopScore()
+		}
+
+		err := ratingLaptop(laptopClient, laptopIDs, scores)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 }
