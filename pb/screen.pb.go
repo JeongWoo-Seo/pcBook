@@ -74,7 +74,7 @@ type Screen struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SizeInch      float32                `protobuf:"fixed32,1,opt,name=size_inch,json=sizeInch,proto3" json:"size_inch,omitempty"`
 	Resolution    *Screen_Resolution     `protobuf:"bytes,2,opt,name=resolution,proto3" json:"resolution,omitempty"`
-	Panel         Screen_Panel           `protobuf:"varint,3,opt,name=panel,proto3,enum=pb.Screen_Panel" json:"panel,omitempty"`
+	Panel         Screen_Panel           `protobuf:"varint,3,opt,name=panel,proto3,enum=pcbook.Screen_Panel" json:"panel,omitempty"`
 	Multitouch    bool                   `protobuf:"varint,4,opt,name=multitouch,proto3" json:"multitouch,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -194,13 +194,13 @@ var File_screen_proto protoreflect.FileDescriptor
 
 const file_screen_proto_rawDesc = "" +
 	"\n" +
-	"\fscreen.proto\x12\x02pb\"\x89\x02\n" +
+	"\fscreen.proto\x12\x06pcbook\"\x91\x02\n" +
 	"\x06Screen\x12\x1b\n" +
-	"\tsize_inch\x18\x01 \x01(\x02R\bsizeInch\x125\n" +
+	"\tsize_inch\x18\x01 \x01(\x02R\bsizeInch\x129\n" +
 	"\n" +
-	"resolution\x18\x02 \x01(\v2\x15.pb.Screen.ResolutionR\n" +
-	"resolution\x12&\n" +
-	"\x05panel\x18\x03 \x01(\x0e2\x10.pb.Screen.PanelR\x05panel\x12\x1e\n" +
+	"resolution\x18\x02 \x01(\v2\x19.pcbook.Screen.ResolutionR\n" +
+	"resolution\x12*\n" +
+	"\x05panel\x18\x03 \x01(\x0e2\x14.pcbook.Screen.PanelR\x05panel\x12\x1e\n" +
 	"\n" +
 	"multitouch\x18\x04 \x01(\bR\n" +
 	"multitouch\x1a:\n" +
@@ -228,13 +228,13 @@ func file_screen_proto_rawDescGZIP() []byte {
 var file_screen_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_screen_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_screen_proto_goTypes = []any{
-	(Screen_Panel)(0),         // 0: pb.Screen.Panel
-	(*Screen)(nil),            // 1: pb.Screen
-	(*Screen_Resolution)(nil), // 2: pb.Screen.Resolution
+	(Screen_Panel)(0),         // 0: pcbook.Screen.Panel
+	(*Screen)(nil),            // 1: pcbook.Screen
+	(*Screen_Resolution)(nil), // 2: pcbook.Screen.Resolution
 }
 var file_screen_proto_depIdxs = []int32{
-	2, // 0: pb.Screen.resolution:type_name -> pb.Screen.Resolution
-	0, // 1: pb.Screen.panel:type_name -> pb.Screen.Panel
+	2, // 0: pcbook.Screen.resolution:type_name -> pcbook.Screen.Resolution
+	0, // 1: pcbook.Screen.panel:type_name -> pcbook.Screen.Panel
 	2, // [2:2] is the sub-list for method output_type
 	2, // [2:2] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name

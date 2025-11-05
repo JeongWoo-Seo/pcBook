@@ -204,19 +204,17 @@ var File_laptop_proto protoreflect.FileDescriptor
 
 const file_laptop_proto_rawDesc = "" +
 	"\n" +
-	"\flaptop.proto\x12\x02pb\x1a\x0fprocessor.proto\x1a\fmemory.proto\x1a\rstorage.proto\x1a\fscreen.proto\x1a\x0ekeyboard.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xcb\x03\n" +
+	"\flaptop.proto\x12\x06pcbook\x1a\x0fprocessor.proto\x1a\fmemory.proto\x1a\rstorage.proto\x1a\fscreen.proto\x1a\x0ekeyboard.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xe3\x03\n" +
 	"\x06Laptop\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
 	"\x05brand\x18\x02 \x01(\tR\x05brand\x12\x12\n" +
-	"\x04name\x18\x03 \x01(\tR\x04name\x12\x19\n" +
-	"\x03cpu\x18\x04 \x01(\v2\a.pb.CPUR\x03cpu\x12\x1c\n" +
-	"\x03ram\x18\x05 \x01(\v2\n" +
-	".pb.MemoryR\x03ram\x12\x1b\n" +
-	"\x04gpus\x18\x06 \x03(\v2\a.pb.GPUR\x04gpus\x12'\n" +
-	"\bstorages\x18\a \x03(\v2\v.pb.StorageR\bstorages\x12\"\n" +
-	"\x06screen\x18\b \x01(\v2\n" +
-	".pb.ScreenR\x06screen\x12(\n" +
-	"\bkeyboard\x18\t \x01(\v2\f.pb.KeyboardR\bkeyboard\x12\x1d\n" +
+	"\x04name\x18\x03 \x01(\tR\x04name\x12\x1d\n" +
+	"\x03cpu\x18\x04 \x01(\v2\v.pcbook.CPUR\x03cpu\x12 \n" +
+	"\x03ram\x18\x05 \x01(\v2\x0e.pcbook.MemoryR\x03ram\x12\x1f\n" +
+	"\x04gpus\x18\x06 \x03(\v2\v.pcbook.GPUR\x04gpus\x12+\n" +
+	"\bstorages\x18\a \x03(\v2\x0f.pcbook.StorageR\bstorages\x12&\n" +
+	"\x06screen\x18\b \x01(\v2\x0e.pcbook.ScreenR\x06screen\x12,\n" +
+	"\bkeyboard\x18\t \x01(\v2\x10.pcbook.KeyboardR\bkeyboard\x12\x1d\n" +
 	"\tweight_kg\x18\n" +
 	" \x01(\x01H\x00R\bweightKg\x12\x1d\n" +
 	"\tweight_lb\x18\v \x01(\x01H\x00R\bweightLb\x12\x14\n" +
@@ -240,23 +238,23 @@ func file_laptop_proto_rawDescGZIP() []byte {
 
 var file_laptop_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_laptop_proto_goTypes = []any{
-	(*Laptop)(nil),                // 0: pb.Laptop
-	(*CPU)(nil),                   // 1: pb.CPU
-	(*Memory)(nil),                // 2: pb.Memory
-	(*GPU)(nil),                   // 3: pb.GPU
-	(*Storage)(nil),               // 4: pb.Storage
-	(*Screen)(nil),                // 5: pb.Screen
-	(*Keyboard)(nil),              // 6: pb.Keyboard
+	(*Laptop)(nil),                // 0: pcbook.Laptop
+	(*CPU)(nil),                   // 1: pcbook.CPU
+	(*Memory)(nil),                // 2: pcbook.Memory
+	(*GPU)(nil),                   // 3: pcbook.GPU
+	(*Storage)(nil),               // 4: pcbook.Storage
+	(*Screen)(nil),                // 5: pcbook.Screen
+	(*Keyboard)(nil),              // 6: pcbook.Keyboard
 	(*timestamppb.Timestamp)(nil), // 7: google.protobuf.Timestamp
 }
 var file_laptop_proto_depIdxs = []int32{
-	1, // 0: pb.Laptop.cpu:type_name -> pb.CPU
-	2, // 1: pb.Laptop.ram:type_name -> pb.Memory
-	3, // 2: pb.Laptop.gpus:type_name -> pb.GPU
-	4, // 3: pb.Laptop.storages:type_name -> pb.Storage
-	5, // 4: pb.Laptop.screen:type_name -> pb.Screen
-	6, // 5: pb.Laptop.keyboard:type_name -> pb.Keyboard
-	7, // 6: pb.Laptop.updated_at:type_name -> google.protobuf.Timestamp
+	1, // 0: pcbook.Laptop.cpu:type_name -> pcbook.CPU
+	2, // 1: pcbook.Laptop.ram:type_name -> pcbook.Memory
+	3, // 2: pcbook.Laptop.gpus:type_name -> pcbook.GPU
+	4, // 3: pcbook.Laptop.storages:type_name -> pcbook.Storage
+	5, // 4: pcbook.Laptop.screen:type_name -> pcbook.Screen
+	6, // 5: pcbook.Laptop.keyboard:type_name -> pcbook.Keyboard
+	7, // 6: pcbook.Laptop.updated_at:type_name -> google.protobuf.Timestamp
 	7, // [7:7] is the sub-list for method output_type
 	7, // [7:7] is the sub-list for method input_type
 	7, // [7:7] is the sub-list for extension type_name

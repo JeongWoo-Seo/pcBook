@@ -499,20 +499,17 @@ var File_laptop_service_proto protoreflect.FileDescriptor
 
 const file_laptop_service_proto_rawDesc = "" +
 	"\n" +
-	"\x14laptop_service.proto\x12\x02pb\x1a\flaptop.proto\x1a\ffilter.proto\"9\n" +
-	"\x13CreateLaptopRequest\x12\"\n" +
-	"\x06laptop\x18\x01 \x01(\v2\n" +
-	".pb.LaptopR\x06laptop\"&\n" +
+	"\x14laptop_service.proto\x12\x06pcbook\x1a\flaptop.proto\x1a\ffilter.proto\"=\n" +
+	"\x13CreateLaptopRequest\x12&\n" +
+	"\x06laptop\x18\x01 \x01(\v2\x0e.pcbook.LaptopR\x06laptop\"&\n" +
 	"\x14CreateLaptopResponse\x12\x0e\n" +
-	"\x02id\x18\x02 \x01(\tR\x02id\"9\n" +
-	"\x13SearchLaptopRequest\x12\"\n" +
-	"\x06filter\x18\x01 \x01(\v2\n" +
-	".pb.FilterR\x06filter\":\n" +
-	"\x14SearchLaptopResponse\x12\"\n" +
-	"\x06laptop\x18\x01 \x01(\v2\n" +
-	".pb.LaptopR\x06laptop\"b\n" +
-	"\x12UploadImageRequest\x12#\n" +
-	"\x04info\x18\x01 \x01(\v2\r.pb.ImageInfoH\x00R\x04info\x12\x1f\n" +
+	"\x02id\x18\x02 \x01(\tR\x02id\"=\n" +
+	"\x13SearchLaptopRequest\x12&\n" +
+	"\x06filter\x18\x01 \x01(\v2\x0e.pcbook.FilterR\x06filter\">\n" +
+	"\x14SearchLaptopResponse\x12&\n" +
+	"\x06laptop\x18\x01 \x01(\v2\x0e.pcbook.LaptopR\x06laptop\"f\n" +
+	"\x12UploadImageRequest\x12'\n" +
+	"\x04info\x18\x01 \x01(\v2\x11.pcbook.ImageInfoH\x00R\x04info\x12\x1f\n" +
 	"\n" +
 	"chunk_data\x18\x02 \x01(\fH\x00R\tchunkDataB\x06\n" +
 	"\x04data\"G\n" +
@@ -530,13 +527,13 @@ const file_laptop_service_proto_rawDesc = "" +
 	"\tlaptop_id\x18\x01 \x01(\tR\blaptopId\x12\x1f\n" +
 	"\vrated_count\x18\x02 \x01(\rR\n" +
 	"ratedCount\x12#\n" +
-	"\raverage_score\x18\x03 \x01(\x01R\faverageScore2\xa2\x02\n" +
-	"\rLaptopService\x12C\n" +
-	"\fCreateLaptop\x12\x17.pb.CreateLaptopRequest\x1a\x18.pb.CreateLaptopResponse\"\x00\x12E\n" +
-	"\fSearchLaptop\x12\x17.pb.SearchLaptopRequest\x1a\x18.pb.SearchLaptopResponse\"\x000\x01\x12B\n" +
-	"\vUploadImage\x12\x16.pb.UploadImageRequest\x1a\x17.pb.UploadImageResponse\"\x00(\x01\x12A\n" +
+	"\raverage_score\x18\x03 \x01(\x01R\faverageScore2\xc2\x02\n" +
+	"\rLaptopService\x12K\n" +
+	"\fCreateLaptop\x12\x1b.pcbook.CreateLaptopRequest\x1a\x1c.pcbook.CreateLaptopResponse\"\x00\x12M\n" +
+	"\fSearchLaptop\x12\x1b.pcbook.SearchLaptopRequest\x1a\x1c.pcbook.SearchLaptopResponse\"\x000\x01\x12J\n" +
+	"\vUploadImage\x12\x1a.pcbook.UploadImageRequest\x1a\x1b.pcbook.UploadImageResponse\"\x00(\x01\x12I\n" +
 	"\n" +
-	"RateLaptop\x12\x15.pb.RateLaptopRequest\x1a\x16.pb.RateLaptopResponse\"\x00(\x010\x01B#Z!github.com/JeongWoo-Seo/pcBook/pbb\x06proto3"
+	"RateLaptop\x12\x19.pcbook.RateLaptopRequest\x1a\x1a.pcbook.RateLaptopResponse\"\x00(\x010\x01B#Z!github.com/JeongWoo-Seo/pcBook/pbb\x06proto3"
 
 var (
 	file_laptop_service_proto_rawDescOnce sync.Once
@@ -552,31 +549,31 @@ func file_laptop_service_proto_rawDescGZIP() []byte {
 
 var file_laptop_service_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_laptop_service_proto_goTypes = []any{
-	(*CreateLaptopRequest)(nil),  // 0: pb.CreateLaptopRequest
-	(*CreateLaptopResponse)(nil), // 1: pb.CreateLaptopResponse
-	(*SearchLaptopRequest)(nil),  // 2: pb.SearchLaptopRequest
-	(*SearchLaptopResponse)(nil), // 3: pb.SearchLaptopResponse
-	(*UploadImageRequest)(nil),   // 4: pb.UploadImageRequest
-	(*ImageInfo)(nil),            // 5: pb.ImageInfo
-	(*UploadImageResponse)(nil),  // 6: pb.UploadImageResponse
-	(*RateLaptopRequest)(nil),    // 7: pb.RateLaptopRequest
-	(*RateLaptopResponse)(nil),   // 8: pb.RateLaptopResponse
-	(*Laptop)(nil),               // 9: pb.Laptop
-	(*Filter)(nil),               // 10: pb.Filter
+	(*CreateLaptopRequest)(nil),  // 0: pcbook.CreateLaptopRequest
+	(*CreateLaptopResponse)(nil), // 1: pcbook.CreateLaptopResponse
+	(*SearchLaptopRequest)(nil),  // 2: pcbook.SearchLaptopRequest
+	(*SearchLaptopResponse)(nil), // 3: pcbook.SearchLaptopResponse
+	(*UploadImageRequest)(nil),   // 4: pcbook.UploadImageRequest
+	(*ImageInfo)(nil),            // 5: pcbook.ImageInfo
+	(*UploadImageResponse)(nil),  // 6: pcbook.UploadImageResponse
+	(*RateLaptopRequest)(nil),    // 7: pcbook.RateLaptopRequest
+	(*RateLaptopResponse)(nil),   // 8: pcbook.RateLaptopResponse
+	(*Laptop)(nil),               // 9: pcbook.Laptop
+	(*Filter)(nil),               // 10: pcbook.Filter
 }
 var file_laptop_service_proto_depIdxs = []int32{
-	9,  // 0: pb.CreateLaptopRequest.laptop:type_name -> pb.Laptop
-	10, // 1: pb.SearchLaptopRequest.filter:type_name -> pb.Filter
-	9,  // 2: pb.SearchLaptopResponse.laptop:type_name -> pb.Laptop
-	5,  // 3: pb.UploadImageRequest.info:type_name -> pb.ImageInfo
-	0,  // 4: pb.LaptopService.CreateLaptop:input_type -> pb.CreateLaptopRequest
-	2,  // 5: pb.LaptopService.SearchLaptop:input_type -> pb.SearchLaptopRequest
-	4,  // 6: pb.LaptopService.UploadImage:input_type -> pb.UploadImageRequest
-	7,  // 7: pb.LaptopService.RateLaptop:input_type -> pb.RateLaptopRequest
-	1,  // 8: pb.LaptopService.CreateLaptop:output_type -> pb.CreateLaptopResponse
-	3,  // 9: pb.LaptopService.SearchLaptop:output_type -> pb.SearchLaptopResponse
-	6,  // 10: pb.LaptopService.UploadImage:output_type -> pb.UploadImageResponse
-	8,  // 11: pb.LaptopService.RateLaptop:output_type -> pb.RateLaptopResponse
+	9,  // 0: pcbook.CreateLaptopRequest.laptop:type_name -> pcbook.Laptop
+	10, // 1: pcbook.SearchLaptopRequest.filter:type_name -> pcbook.Filter
+	9,  // 2: pcbook.SearchLaptopResponse.laptop:type_name -> pcbook.Laptop
+	5,  // 3: pcbook.UploadImageRequest.info:type_name -> pcbook.ImageInfo
+	0,  // 4: pcbook.LaptopService.CreateLaptop:input_type -> pcbook.CreateLaptopRequest
+	2,  // 5: pcbook.LaptopService.SearchLaptop:input_type -> pcbook.SearchLaptopRequest
+	4,  // 6: pcbook.LaptopService.UploadImage:input_type -> pcbook.UploadImageRequest
+	7,  // 7: pcbook.LaptopService.RateLaptop:input_type -> pcbook.RateLaptopRequest
+	1,  // 8: pcbook.LaptopService.CreateLaptop:output_type -> pcbook.CreateLaptopResponse
+	3,  // 9: pcbook.LaptopService.SearchLaptop:output_type -> pcbook.SearchLaptopResponse
+	6,  // 10: pcbook.LaptopService.UploadImage:output_type -> pcbook.UploadImageResponse
+	8,  // 11: pcbook.LaptopService.RateLaptop:output_type -> pcbook.RateLaptopResponse
 	8,  // [8:12] is the sub-list for method output_type
 	4,  // [4:8] is the sub-list for method input_type
 	4,  // [4:4] is the sub-list for extension type_name

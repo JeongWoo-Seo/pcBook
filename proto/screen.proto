@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package pb;
+package pcbook;
 
 option go_package = "github.com/JeongWoo-Seo/pcBook/pb";
 

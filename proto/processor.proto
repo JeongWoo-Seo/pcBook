@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package pb;
+package pcbook;
 
 import "memory.proto";
 

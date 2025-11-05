@@ -19,10 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	LaptopService_CreateLaptop_FullMethodName = "/pb.LaptopService/CreateLaptop"
-	LaptopService_SearchLaptop_FullMethodName = "/pb.LaptopService/SearchLaptop"
-	LaptopService_UploadImage_FullMethodName  = "/pb.LaptopService/UploadImage"
-	LaptopService_RateLaptop_FullMethodName   = "/pb.LaptopService/RateLaptop"
+	LaptopService_CreateLaptop_FullMethodName = "/pcbook.LaptopService/CreateLaptop"
+	LaptopService_SearchLaptop_FullMethodName = "/pcbook.LaptopService/SearchLaptop"
+	LaptopService_UploadImage_FullMethodName  = "/pcbook.LaptopService/UploadImage"
+	LaptopService_RateLaptop_FullMethodName   = "/pcbook.LaptopService/RateLaptop"
 )
 
 // LaptopServiceClient is the client API for LaptopService service.
@@ -196,7 +196,7 @@ type LaptopService_RateLaptopServer = grpc.BidiStreamingServer[RateLaptopRequest
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var LaptopService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "pb.LaptopService",
+	ServiceName: "pcbook.LaptopService",
 	HandlerType: (*LaptopServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

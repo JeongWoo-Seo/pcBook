@@ -93,13 +93,12 @@ var File_filter_proto protoreflect.FileDescriptor
 
 const file_filter_proto_rawDesc = "" +
 	"\n" +
-	"\ffilter.proto\x12\x02pb\x1a\fmemory.proto\"\x8e\x01\n" +
+	"\ffilter.proto\x12\x06pcbook\x1a\fmemory.proto\"\x92\x01\n" +
 	"\x06Filter\x12\x1b\n" +
 	"\tmax_price\x18\x01 \x01(\rR\bmaxPrice\x12\"\n" +
 	"\rmin_cpu_cores\x18\x02 \x01(\rR\vminCpuCores\x12\x1e\n" +
-	"\vmin_cpu_ghz\x18\x03 \x01(\x01R\tminCpuGhz\x12#\n" +
-	"\amin_ram\x18\x04 \x01(\v2\n" +
-	".pb.MemoryR\x06minRamB#Z!github.com/JeongWoo-Seo/pcBook/pbb\x06proto3"
+	"\vmin_cpu_ghz\x18\x03 \x01(\x01R\tminCpuGhz\x12'\n" +
+	"\amin_ram\x18\x04 \x01(\v2\x0e.pcbook.MemoryR\x06minRamB#Z!github.com/JeongWoo-Seo/pcBook/pbb\x06proto3"
 
 var (
 	file_filter_proto_rawDescOnce sync.Once
@@ -115,11 +114,11 @@ func file_filter_proto_rawDescGZIP() []byte {
 
 var file_filter_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_filter_proto_goTypes = []any{
-	(*Filter)(nil), // 0: pb.Filter
-	(*Memory)(nil), // 1: pb.Memory
+	(*Filter)(nil), // 0: pcbook.Filter
+	(*Memory)(nil), // 1: pcbook.Memory
 }
 var file_filter_proto_depIdxs = []int32{
-	1, // 0: pb.Filter.min_ram:type_name -> pb.Memory
+	1, // 0: pcbook.Filter.min_ram:type_name -> pcbook.Memory
 	1, // [1:1] is the sub-list for method output_type
 	1, // [1:1] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name

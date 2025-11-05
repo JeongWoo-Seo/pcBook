@@ -14,4 +14,7 @@ client:
 test:
 	go test -cover -race ./...
 
-.PHONY: proto run test
+evans:
+	evans -r repl -p 8080
+
+.PHONY: proto run test server client evans

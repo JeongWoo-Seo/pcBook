@@ -85,7 +85,7 @@ func (Memory_Unit) EnumDescriptor() ([]byte, []int) {
 type Memory struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Value         uint64                 `protobuf:"varint,1,opt,name=value,proto3" json:"value,omitempty"`
-	Unit          Memory_Unit            `protobuf:"varint,2,opt,name=unit,proto3,enum=pb.Memory_Unit" json:"unit,omitempty"`
+	Unit          Memory_Unit            `protobuf:"varint,2,opt,name=unit,proto3,enum=pcbook.Memory_Unit" json:"unit,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -138,10 +138,10 @@ var File_memory_proto protoreflect.FileDescriptor
 
 const file_memory_proto_rawDesc = "" +
 	"\n" +
-	"\fmemory.proto\x12\x02pb\"\xa3\x01\n" +
+	"\fmemory.proto\x12\x06pcbook\"\xa7\x01\n" +
 	"\x06Memory\x12\x14\n" +
-	"\x05value\x18\x01 \x01(\x04R\x05value\x12#\n" +
-	"\x04unit\x18\x02 \x01(\x0e2\x0f.pb.Memory.UnitR\x04unit\"^\n" +
+	"\x05value\x18\x01 \x01(\x04R\x05value\x12'\n" +
+	"\x04unit\x18\x02 \x01(\x0e2\x13.pcbook.Memory.UnitR\x04unit\"^\n" +
 	"\x04Unit\x12\v\n" +
 	"\aUNKNOWN\x10\x00\x12\a\n" +
 	"\x03BIT\x10\x01\x12\b\n" +
@@ -166,11 +166,11 @@ func file_memory_proto_rawDescGZIP() []byte {
 var file_memory_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_memory_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_memory_proto_goTypes = []any{
-	(Memory_Unit)(0), // 0: pb.Memory.Unit
-	(*Memory)(nil),   // 1: pb.Memory
+	(Memory_Unit)(0), // 0: pcbook.Memory.Unit
+	(*Memory)(nil),   // 1: pcbook.Memory
 }
 var file_memory_proto_depIdxs = []int32{
-	0, // 0: pb.Memory.unit:type_name -> pb.Memory.Unit
+	0, // 0: pcbook.Memory.unit:type_name -> pcbook.Memory.Unit
 	1, // [1:1] is the sub-list for method output_type
 	1, // [1:1] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name

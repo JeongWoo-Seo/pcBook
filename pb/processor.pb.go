@@ -185,21 +185,20 @@ var File_processor_proto protoreflect.FileDescriptor
 
 const file_processor_proto_rawDesc = "" +
 	"\n" +
-	"\x0fprocessor.proto\x12\x02pb\x1a\fmemory.proto\"\xab\x01\n" +
+	"\x0fprocessor.proto\x12\x06pcbook\x1a\fmemory.proto\"\xab\x01\n" +
 	"\x03CPU\x12\x14\n" +
 	"\x05brand\x18\x01 \x01(\tR\x05brand\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12!\n" +
 	"\fnumber_cores\x18\x03 \x01(\rR\vnumberCores\x12%\n" +
 	"\x0enumber_threads\x18\x04 \x01(\rR\rnumberThreads\x12\x17\n" +
 	"\amin_ghz\x18\x05 \x01(\x01R\x06minGhz\x12\x17\n" +
-	"\amax_ghz\x18\x06 \x01(\x01R\x06maxGhz\"\x85\x01\n" +
+	"\amax_ghz\x18\x06 \x01(\x01R\x06maxGhz\"\x89\x01\n" +
 	"\x03GPU\x12\x14\n" +
 	"\x05brand\x18\x01 \x01(\tR\x05brand\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x17\n" +
 	"\amin_ghz\x18\x03 \x01(\x01R\x06minGhz\x12\x17\n" +
-	"\amax_ghz\x18\x04 \x01(\x01R\x06maxGhz\x12\"\n" +
-	"\x06memory\x18\x05 \x01(\v2\n" +
-	".pb.MemoryR\x06memoryB#Z!github.com/JeongWoo-Seo/pcBook/pbb\x06proto3"
+	"\amax_ghz\x18\x04 \x01(\x01R\x06maxGhz\x12&\n" +
+	"\x06memory\x18\x05 \x01(\v2\x0e.pcbook.MemoryR\x06memoryB#Z!github.com/JeongWoo-Seo/pcBook/pbb\x06proto3"
 
 var (
 	file_processor_proto_rawDescOnce sync.Once
@@ -215,12 +214,12 @@ func file_processor_proto_rawDescGZIP() []byte {
 
 var file_processor_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_processor_proto_goTypes = []any{
-	(*CPU)(nil),    // 0: pb.CPU
-	(*GPU)(nil),    // 1: pb.GPU
-	(*Memory)(nil), // 2: pb.Memory
+	(*CPU)(nil),    // 0: pcbook.CPU
+	(*GPU)(nil),    // 1: pcbook.GPU
+	(*Memory)(nil), // 2: pcbook.Memory
 }
 var file_processor_proto_depIdxs = []int32{
-	2, // 0: pb.GPU.memory:type_name -> pb.Memory
+	2, // 0: pcbook.GPU.memory:type_name -> pcbook.Memory
 	1, // [1:1] is the sub-list for method output_type
 	1, // [1:1] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name

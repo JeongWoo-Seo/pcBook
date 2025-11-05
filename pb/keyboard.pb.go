@@ -75,7 +75,7 @@ func (Keyboard_Layout) EnumDescriptor() ([]byte, []int) {
 
 type Keyboard struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Layout        Keyboard_Layout        `protobuf:"varint,1,opt,name=layout,proto3,enum=pb.Keyboard_Layout" json:"layout,omitempty"`
+	Layout        Keyboard_Layout        `protobuf:"varint,1,opt,name=layout,proto3,enum=pcbook.Keyboard_Layout" json:"layout,omitempty"`
 	Backlit       bool                   `protobuf:"varint,2,opt,name=backlit,proto3" json:"backlit,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -129,9 +129,9 @@ var File_keyboard_proto protoreflect.FileDescriptor
 
 const file_keyboard_proto_rawDesc = "" +
 	"\n" +
-	"\x0ekeyboard.proto\x12\x02pb\"\x8c\x01\n" +
-	"\bKeyboard\x12+\n" +
-	"\x06layout\x18\x01 \x01(\x0e2\x13.pb.Keyboard.LayoutR\x06layout\x12\x18\n" +
+	"\x0ekeyboard.proto\x12\x06pcbook\"\x90\x01\n" +
+	"\bKeyboard\x12/\n" +
+	"\x06layout\x18\x01 \x01(\x0e2\x17.pcbook.Keyboard.LayoutR\x06layout\x12\x18\n" +
 	"\abacklit\x18\x02 \x01(\bR\abacklit\"9\n" +
 	"\x06Layout\x12\v\n" +
 	"\aUNKNOWN\x10\x00\x12\n" +
@@ -157,11 +157,11 @@ func file_keyboard_proto_rawDescGZIP() []byte {
 var file_keyboard_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_keyboard_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_keyboard_proto_goTypes = []any{
-	(Keyboard_Layout)(0), // 0: pb.Keyboard.Layout
-	(*Keyboard)(nil),     // 1: pb.Keyboard
+	(Keyboard_Layout)(0), // 0: pcbook.Keyboard.Layout
+	(*Keyboard)(nil),     // 1: pcbook.Keyboard
 }
 var file_keyboard_proto_depIdxs = []int32{
-	0, // 0: pb.Keyboard.layout:type_name -> pb.Keyboard.Layout
+	0, // 0: pcbook.Keyboard.layout:type_name -> pcbook.Keyboard.Layout
 	1, // [1:1] is the sub-list for method output_type
 	1, // [1:1] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name

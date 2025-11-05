@@ -72,7 +72,7 @@ func (Storage_Driver) EnumDescriptor() ([]byte, []int) {
 
 type Storage struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Driver        Storage_Driver         `protobuf:"varint,1,opt,name=driver,proto3,enum=pb.Storage_Driver" json:"driver,omitempty"`
+	Driver        Storage_Driver         `protobuf:"varint,1,opt,name=driver,proto3,enum=pcbook.Storage_Driver" json:"driver,omitempty"`
 	Memory        *Memory                `protobuf:"bytes,2,opt,name=memory,proto3" json:"memory,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -126,11 +126,10 @@ var File_storage_proto protoreflect.FileDescriptor
 
 const file_storage_proto_rawDesc = "" +
 	"\n" +
-	"\rstorage.proto\x12\x02pb\x1a\fmemory.proto\"\x82\x01\n" +
-	"\aStorage\x12*\n" +
-	"\x06driver\x18\x01 \x01(\x0e2\x12.pb.Storage.DriverR\x06driver\x12\"\n" +
-	"\x06memory\x18\x02 \x01(\v2\n" +
-	".pb.MemoryR\x06memory\"'\n" +
+	"\rstorage.proto\x12\x06pcbook\x1a\fmemory.proto\"\x8a\x01\n" +
+	"\aStorage\x12.\n" +
+	"\x06driver\x18\x01 \x01(\x0e2\x16.pcbook.Storage.DriverR\x06driver\x12&\n" +
+	"\x06memory\x18\x02 \x01(\v2\x0e.pcbook.MemoryR\x06memory\"'\n" +
 	"\x06Driver\x12\v\n" +
 	"\aUNKNOWN\x10\x00\x12\a\n" +
 	"\x03HDD\x10\x01\x12\a\n" +
@@ -151,13 +150,13 @@ func file_storage_proto_rawDescGZIP() []byte {
 var file_storage_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_storage_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_storage_proto_goTypes = []any{
-	(Storage_Driver)(0), // 0: pb.Storage.Driver
-	(*Storage)(nil),     // 1: pb.Storage
-	(*Memory)(nil),      // 2: pb.Memory
+	(Storage_Driver)(0), // 0: pcbook.Storage.Driver
+	(*Storage)(nil),     // 1: pcbook.Storage
+	(*Memory)(nil),      // 2: pcbook.Memory
 }
 var file_storage_proto_depIdxs = []int32{
-	0, // 0: pb.Storage.driver:type_name -> pb.Storage.Driver
-	2, // 1: pb.Storage.memory:type_name -> pb.Memory
+	0, // 0: pcbook.Storage.driver:type_name -> pcbook.Storage.Driver
+	2, // 1: pcbook.Storage.memory:type_name -> pcbook.Memory
 	2, // [2:2] is the sub-list for method output_type
 	2, // [2:2] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name
