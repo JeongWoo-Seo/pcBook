@@ -1,16 +1,19 @@
 package main
 
 import (
+	"crypto/tls"
+	"crypto/x509"
 	"flag"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"github.com/JeongWoo-Seo/pcBook/client"
 	"github.com/JeongWoo-Seo/pcBook/pb"
 	"github.com/JeongWoo-Seo/pcBook/util"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/credentials"
 )
 
 const (
@@ -24,7 +27,12 @@ func main() {
 	flag.Parse()
 	log.Printf("server port : %s", *serverAddress)
 
-	cc1, err := grpc.NewClient(*serverAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	tlscredentials, err := loadTLSCredentials()
+	if err != nil {
+		log.Fatal("can not laod tls credentials: ", err)
+	}
+
+	cc1, err := grpc.NewClient(*serverAddress, grpc.WithTransportCredentials(tlscredentials))
 	if err != nil {
 		log.Fatal("can not create client: ", err)
 	}
@@ -36,7 +44,7 @@ func main() {
 	}
 	cc2, err := grpc.NewClient(
 		*serverAddress,
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithTransportCredentials(tlscredentials),
 		grpc.WithUnaryInterceptor(interceptor.Unary()),
 		grpc.WithStreamInterceptor(interceptor.Stream()),
 	)
@@ -115,4 +123,28 @@ func testRatingLaptop(laptopClient *client.LaptopClient) {
 			log.Fatal(err)
 		}
 	}
+}
+
+func loadTLSCredentials() (credentials.TransportCredentials, error) {
+	pemServerCA, err := os.ReadFile("cert/ca-cert.pem")
+	if err != nil {
+		return nil, err
+	}
+
+	certPool := x509.NewCertPool()
+	if !certPool.AppendCertsFromPEM(pemServerCA) {
+		return nil, fmt.Errorf("failed to add server CA's certificate")
+	}
+
+	ClientCert, err := tls.LoadX509KeyPair("cert/client-cert.pem", "cert/client-key.pem")
+	if err != nil {
+		return nil, err
+	}
+
+	config := &tls.Config{
+		Certificates: []tls.Certificate{ClientCert},
+		RootCAs:      certPool,
+	}
+
+	return credentials.NewTLS(config), nil
 }

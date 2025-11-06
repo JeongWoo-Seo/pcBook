@@ -17,4 +17,7 @@ test:
 evans:
 	evans -r repl -p 8080
 
-.PHONY: proto run test server client evans
+cert:
+	cd cert; ./gen.sh; cd ..
+
+.PHONY: proto run test server client evans cert
