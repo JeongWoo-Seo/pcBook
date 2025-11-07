@@ -11,6 +11,8 @@ import (
 const (
 	authorizationHeader = "authorization"
 	authorizationBearer = "bearer"
+	TokenKey            = "cd56e76e8bf6a1c32eb26966c864e983"
+	TokenDuration       = 15 * time.Minute
 )
 
 type PasetoManager struct {

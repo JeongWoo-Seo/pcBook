@@ -14,6 +14,7 @@ import (
 	"github.com/JeongWoo-Seo/pcBook/util"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 const (
@@ -24,15 +25,21 @@ const (
 
 func main() {
 	serverAddress := flag.String("address", "", "the server port")
+	enableTls := flag.Bool("tls", false, "enable tls")
 	flag.Parse()
 	log.Printf("server port : %s", *serverAddress)
 
-	tlscredentials, err := loadTLSCredentials()
-	if err != nil {
-		log.Fatal("can not laod tls credentials: ", err)
+	transferOption := grpc.WithTransportCredentials(insecure.NewCredentials())
+
+	if *enableTls {
+		tlscredentials, err := loadTLSCredentials()
+		if err != nil {
+			log.Fatal("can not laod tls credentials: ", err)
+		}
+		transferOption = grpc.WithTransportCredentials(tlscredentials)
 	}
 
-	cc1, err := grpc.NewClient(*serverAddress, grpc.WithTransportCredentials(tlscredentials))
+	cc1, err := grpc.NewClient(*serverAddress, transferOption)
 	if err != nil {
 		log.Fatal("can not create client: ", err)
 	}
@@ -44,7 +51,7 @@ func main() {
 	}
 	cc2, err := grpc.NewClient(
 		*serverAddress,
-		grpc.WithTransportCredentials(tlscredentials),
+		transferOption,
 		grpc.WithUnaryInterceptor(interceptor.Unary()),
 		grpc.WithStreamInterceptor(interceptor.Stream()),
 	)

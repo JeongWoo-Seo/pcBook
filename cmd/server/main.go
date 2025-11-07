@@ -8,7 +8,6 @@ import (
 	"log"
 	"net"
 	"os"
-	"time"
 
 	"github.com/JeongWoo-Seo/pcBook/pb"
 	"github.com/JeongWoo-Seo/pcBook/service"
@@ -17,18 +16,14 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-const (
-	tokenKey      = "cd56e76e8bf6a1c32eb26966c864e983"
-	tokenDuration = 15 * time.Minute
-)
-
 func main() {
 	port := flag.Int("port", 0, "the server port")
+	enableTls := flag.Bool("tls", false, "enable tls")
 	flag.Parse()
 	log.Printf("start server port : %d", *port)
 
 	userStore := service.NewInMemoryUserStore()
-	tokenManager := service.NewPasetoManager(tokenKey, tokenDuration)
+	tokenManager := service.NewPasetoManager(service.TokenKey, service.TokenDuration)
 	authServer := service.NewAuthServer(userStore, tokenManager)
 	err := seedUser(userStore)
 	if err != nil {
@@ -40,17 +35,21 @@ func main() {
 	ratingStore := service.NewInMemoryRatingStore()
 	laptopServer := service.NewLaptopServer(laptopStore, imageStore, ratingStore)
 
-	tlsCerdentials, err := loadTLSCredentials()
-	if err != nil {
-		log.Fatal("can not load tls credentials: ", err)
-	}
-
 	interceptor := service.NewAuthInterceptor(tokenManager, accessibleRole())
-	grpcServer := grpc.NewServer(
-		grpc.Creds(tlsCerdentials),
+	serverOpts := []grpc.ServerOption{
 		grpc.UnaryInterceptor(interceptor.Unary()),
 		grpc.StreamInterceptor(interceptor.Stream()),
-	)
+	}
+
+	if *enableTls {
+		tlsCerdentials, err := loadTLSCredentials()
+		if err != nil {
+			log.Fatal("can not load tls credentials: ", err)
+		}
+		serverOpts = append(serverOpts, grpc.Creds(tlsCerdentials))
+	}
+
+	grpcServer := grpc.NewServer(serverOpts...)
 	pb.RegisterAuthServiceServer(grpcServer, authServer)
 	pb.RegisterLaptopServiceServer(grpcServer, laptopServer)
 	reflection.Register(grpcServer)

@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"log"
 	"strings"
 
 	"google.golang.org/grpc"
@@ -26,6 +27,7 @@ func (i *AuthInterceptor) Unary() grpc.UnaryServerInterceptor {
 		info *grpc.UnaryServerInfo,
 		handler grpc.UnaryHandler,
 	) (any, error) {
+		log.Println("--> unary interceptor: ", info.FullMethod)
 		err := i.Authorize(ctx, info.FullMethod)
 		if err != nil {
 			return nil, err
