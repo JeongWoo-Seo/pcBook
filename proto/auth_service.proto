@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package pcbook;
 
+import "google/api/annotations.proto";
+
 option go_package = "github.com/JeongWoo-Seo/pcBook/pb";
 
 message LoginRequest{
@@ -15,5 +17,9 @@ message LoginResponse{
 
 service AuthService{
     rpc Login(LoginRequest) returns (LoginResponse){
+        option (google.api.http) = {
+            post : "/auth/login"
+            body : "*"
+        };
     };
 }

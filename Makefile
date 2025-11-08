@@ -3,10 +3,16 @@ proto:
 	protoc --proto_path=./proto \
        --go_out=paths=source_relative:./pb \
        --go-grpc_out=paths=source_relative:./pb \
+	   --grpc-gateway_out=paths=source_relative:./pb \
+	   --openapiv2_out ./swagger \
+       --openapiv2_opt logtostderr=true \
        ./proto/*.proto
 
 server:
 	go run cmd/server/main.go -port 8080
+
+rest:
+	go run cmd/server/main.go -port 8081 -type rest -endpoint 0.0.0.0:8080
 
 server1:
 	go run cmd/server/main.go -port 50051

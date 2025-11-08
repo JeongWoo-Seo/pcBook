@@ -6,6 +6,7 @@ option go_package = "github.com/JeongWoo-Seo/pcBook/pb";
 
 import "laptop.proto";
 import "filter.proto";
+import "google/api/annotations.proto";
 
 message CreateLaptopRequest { 
     Laptop laptop = 1;
@@ -53,14 +54,29 @@ message RateLaptopResponse{
 
 service LaptopService{
     rpc CreateLaptop(CreateLaptopRequest) returns (CreateLaptopResponse){
+        option (google.api.http) = {
+            post : "/laptop/create"
+            body : "*"
+        };
     };
 
     rpc SearchLaptop(SearchLaptopRequest) returns (stream SearchLaptopResponse){
+        option (google.api.http) = {
+            get : "/laptop/search"
+        };
     };
 
     rpc UploadImage(stream UploadImageRequest) returns (UploadImageResponse){
+        option (google.api.http) = {
+            post : "/laptop/uplaod_image"
+            body : "*"
+        };
     };
 
     rpc RateLaptop(stream RateLaptopRequest) returns (stream RateLaptopResponse){
+        option (google.api.http) = {
+            post : "/laptop/rate"
+            body : "*"
+        };
     };
 }
