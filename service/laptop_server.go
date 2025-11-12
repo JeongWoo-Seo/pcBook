@@ -135,7 +135,7 @@ func (s *LaptopServer) UploadImage(stream grpc.ClientStreamingServer[pb.UploadIm
 
 		imagesie += size
 		if imagesie > maxImageSize {
-			return logErr(status.Errorf(codes.InvalidArgument, "image is to large: %d > %d", imagesie, maxImageSize))
+			return logErr(status.Errorf(codes.InvalidArgument, "image is too large: %d > %d", imagesie, maxImageSize))
 		}
 
 		_, err = imageData.Write(chunk)

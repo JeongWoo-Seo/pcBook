@@ -33,15 +33,12 @@ func NewDiskImageStore(imageFolder string) *DiskImageStore {
 }
 
 func (store *DiskImageStore) Save(laptopID string, imageType string, imageData bytes.Buffer) (string, error) {
-	store.mutax.Lock()
-	defer store.mutax.Unlock()
-
 	imageID, err := uuid.NewRandom()
 	if err != nil {
 		return "", fmt.Errorf("failed to create image id : %w", err)
 	}
 
-	imagePath := fmt.Sprintf("%s/%s%s", store.imageFolder, imageID, imageType)
+	imagePath := fmt.Sprintf("%s/%s.%s", store.imageFolder, imageID.String(), imageType)
 
 	file, err := os.Create(imagePath)
 	if err != nil {
