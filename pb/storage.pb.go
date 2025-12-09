@@ -122,6 +122,66 @@ func (x *Storage) GetMemory() *Memory {
 	return nil
 }
 
+type StorageUsage struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TotalMemory   float64                `protobuf:"fixed64,1,opt,name=total_memory,json=totalMemory,proto3" json:"total_memory,omitempty"`
+	CurrentMemory float64                `protobuf:"fixed64,2,opt,name=current_memory,json=currentMemory,proto3" json:"current_memory,omitempty"`
+	Usage         float64                `protobuf:"fixed64,3,opt,name=usage,proto3" json:"usage,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *StorageUsage) Reset() {
+	*x = StorageUsage{}
+	mi := &file_storage_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *StorageUsage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StorageUsage) ProtoMessage() {}
+
+func (x *StorageUsage) ProtoReflect() protoreflect.Message {
+	mi := &file_storage_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StorageUsage.ProtoReflect.Descriptor instead.
+func (*StorageUsage) Descriptor() ([]byte, []int) {
+	return file_storage_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *StorageUsage) GetTotalMemory() float64 {
+	if x != nil {
+		return x.TotalMemory
+	}
+	return 0
+}
+
+func (x *StorageUsage) GetCurrentMemory() float64 {
+	if x != nil {
+		return x.CurrentMemory
+	}
+	return 0
+}
+
+func (x *StorageUsage) GetUsage() float64 {
+	if x != nil {
+		return x.Usage
+	}
+	return 0
+}
+
 var File_storage_proto protoreflect.FileDescriptor
 
 const file_storage_proto_rawDesc = "" +
@@ -133,7 +193,11 @@ const file_storage_proto_rawDesc = "" +
 	"\x06Driver\x12\v\n" +
 	"\aUNKNOWN\x10\x00\x12\a\n" +
 	"\x03HDD\x10\x01\x12\a\n" +
-	"\x03SSD\x10\x02B#Z!github.com/JeongWoo-Seo/pcBook/pbb\x06proto3"
+	"\x03SSD\x10\x02\"n\n" +
+	"\fStorageUsage\x12!\n" +
+	"\ftotal_memory\x18\x01 \x01(\x01R\vtotalMemory\x12%\n" +
+	"\x0ecurrent_memory\x18\x02 \x01(\x01R\rcurrentMemory\x12\x14\n" +
+	"\x05usage\x18\x03 \x01(\x01R\x05usageB#Z!github.com/JeongWoo-Seo/pcBook/pbb\x06proto3"
 
 var (
 	file_storage_proto_rawDescOnce sync.Once
@@ -148,15 +212,16 @@ func file_storage_proto_rawDescGZIP() []byte {
 }
 
 var file_storage_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_storage_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_storage_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_storage_proto_goTypes = []any{
-	(Storage_Driver)(0), // 0: pcbook.Storage.Driver
-	(*Storage)(nil),     // 1: pcbook.Storage
-	(*Memory)(nil),      // 2: pcbook.Memory
+	(Storage_Driver)(0),  // 0: pcbook.Storage.Driver
+	(*Storage)(nil),      // 1: pcbook.Storage
+	(*StorageUsage)(nil), // 2: pcbook.StorageUsage
+	(*Memory)(nil),       // 3: pcbook.Memory
 }
 var file_storage_proto_depIdxs = []int32{
 	0, // 0: pcbook.Storage.driver:type_name -> pcbook.Storage.Driver
-	2, // 1: pcbook.Storage.memory:type_name -> pcbook.Memory
+	3, // 1: pcbook.Storage.memory:type_name -> pcbook.Memory
 	2, // [2:2] is the sub-list for method output_type
 	2, // [2:2] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name
@@ -176,7 +241,7 @@ func file_storage_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_storage_proto_rawDesc), len(file_storage_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   1,
+			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

@@ -174,6 +174,47 @@ func request_LaptopService_RateLaptop_0(ctx context.Context, marshaler runtime.M
 	return stream, metadata, nil
 }
 
+func request_LaptopService_SendLaptopInfo_0(ctx context.Context, marshaler runtime.Marshaler, client LaptopServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var metadata runtime.ServerMetadata
+	stream, err := client.SendLaptopInfo(ctx)
+	if err != nil {
+		grpclog.Errorf("Failed to start streaming: %v", err)
+		return nil, metadata, err
+	}
+	dec := marshaler.NewDecoder(req.Body)
+	for {
+		var protoReq SendLaptopInfoRequest
+		err = dec.Decode(&protoReq)
+		if errors.Is(err, io.EOF) {
+			break
+		}
+		if err != nil {
+			grpclog.Errorf("Failed to decode request: %v", err)
+			return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+		}
+		if err = stream.Send(&protoReq); err != nil {
+			if errors.Is(err, io.EOF) {
+				break
+			}
+			grpclog.Errorf("Failed to send request: %v", err)
+			return nil, metadata, err
+		}
+	}
+	if err := stream.CloseSend(); err != nil {
+		grpclog.Errorf("Failed to terminate client stream: %v", err)
+		return nil, metadata, err
+	}
+	header, err := stream.Header()
+	if err != nil {
+		grpclog.Errorf("Failed to get header from client: %v", err)
+		return nil, metadata, err
+	}
+	metadata.HeaderMD = header
+	msg, err := stream.CloseAndRecv()
+	metadata.TrailerMD = stream.Trailer()
+	return msg, metadata, err
+}
+
 // RegisterLaptopServiceHandlerServer registers the http handlers for service LaptopService to "mux".
 // UnaryRPC     :call LaptopServiceServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
@@ -216,6 +257,13 @@ func RegisterLaptopServiceHandlerServer(ctx context.Context, mux *runtime.ServeM
 	})
 
 	mux.Handle(http.MethodPost, pattern_LaptopService_RateLaptop_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		err := status.Error(codes.Unimplemented, "streaming calls are not yet supported in the in-process transport")
+		_, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+		return
+	})
+
+	mux.Handle(http.MethodPost, pattern_LaptopService_SendLaptopInfo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		err := status.Error(codes.Unimplemented, "streaming calls are not yet supported in the in-process transport")
 		_, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
@@ -329,19 +377,38 @@ func RegisterLaptopServiceHandlerClient(ctx context.Context, mux *runtime.ServeM
 		}
 		forward_LaptopService_RateLaptop_0(annotatedContext, mux, outboundMarshaler, w, req, func() (proto.Message, error) { return resp.Recv() }, mux.GetForwardResponseOptions()...)
 	})
+	mux.Handle(http.MethodPost, pattern_LaptopService_SendLaptopInfo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/pcbook.LaptopService/SendLaptopInfo", runtime.WithHTTPPathPattern("/laptop/send_info"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_LaptopService_SendLaptopInfo_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_LaptopService_SendLaptopInfo_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
 	return nil
 }
 
 var (
-	pattern_LaptopService_CreateLaptop_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"laptop", "create"}, ""))
-	pattern_LaptopService_SearchLaptop_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"laptop", "search"}, ""))
-	pattern_LaptopService_UploadImage_0  = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"laptop", "uplaod_image"}, ""))
-	pattern_LaptopService_RateLaptop_0   = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"laptop", "rate"}, ""))
+	pattern_LaptopService_CreateLaptop_0   = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"laptop", "create"}, ""))
+	pattern_LaptopService_SearchLaptop_0   = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"laptop", "search"}, ""))
+	pattern_LaptopService_UploadImage_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"laptop", "uplaod_image"}, ""))
+	pattern_LaptopService_RateLaptop_0     = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"laptop", "rate"}, ""))
+	pattern_LaptopService_SendLaptopInfo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"laptop", "send_info"}, ""))
 )
 
 var (
-	forward_LaptopService_CreateLaptop_0 = runtime.ForwardResponseMessage
-	forward_LaptopService_SearchLaptop_0 = runtime.ForwardResponseStream
-	forward_LaptopService_UploadImage_0  = runtime.ForwardResponseMessage
-	forward_LaptopService_RateLaptop_0   = runtime.ForwardResponseStream
+	forward_LaptopService_CreateLaptop_0   = runtime.ForwardResponseMessage
+	forward_LaptopService_SearchLaptop_0   = runtime.ForwardResponseStream
+	forward_LaptopService_UploadImage_0    = runtime.ForwardResponseMessage
+	forward_LaptopService_RateLaptop_0     = runtime.ForwardResponseStream
+	forward_LaptopService_SendLaptopInfo_0 = runtime.ForwardResponseMessage
 )

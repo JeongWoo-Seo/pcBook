@@ -167,6 +167,39 @@
         ]
       }
     },
+    "/laptop/send_info": {
+      "post": {
+        "operationId": "LaptopService_SendLaptopInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pcbookSendLaptopInfoResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": " (streaming inputs)",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pcbookSendLaptopInfoRequest"
+            }
+          }
+        ],
+        "tags": [
+          "LaptopService"
+        ]
+      }
+    },
     "/laptop/uplaod_image": {
       "post": {
         "operationId": "LaptopService_UploadImage",
@@ -423,6 +456,35 @@
         }
       }
     },
+    "pcbookLaptopInfo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "cpu": {
+          "type": "number",
+          "format": "double"
+        },
+        "ram": {
+          "$ref": "#/definitions/pcbookMemoryUsage"
+        },
+        "storages": {
+          "$ref": "#/definitions/pcbookMemoryUsage"
+        },
+        "network": {
+          "$ref": "#/definitions/pcbookNetwork"
+        },
+        "battery": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "createAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
     "pcbookMemory": {
       "type": "object",
       "properties": {
@@ -432,6 +494,36 @@
         },
         "unit": {
           "$ref": "#/definitions/MemoryUnit"
+        }
+      }
+    },
+    "pcbookMemoryUsage": {
+      "type": "object",
+      "properties": {
+        "totalMemory": {
+          "type": "number",
+          "format": "double"
+        },
+        "currentMemory": {
+          "type": "number",
+          "format": "double"
+        },
+        "usage": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "pcbookNetwork": {
+      "type": "object",
+      "properties": {
+        "rx": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "tx": {
+          "type": "string",
+          "format": "uint64"
         }
       }
     },
@@ -486,6 +578,22 @@
       "properties": {
         "laptop": {
           "$ref": "#/definitions/pcbookLaptop"
+        }
+      }
+    },
+    "pcbookSendLaptopInfoRequest": {
+      "type": "object",
+      "properties": {
+        "laptop": {
+          "$ref": "#/definitions/pcbookLaptopInfo"
+        }
+      }
+    },
+    "pcbookSendLaptopInfoResponse": {
+      "type": "object",
+      "properties": {
+        "msg": {
+          "type": "string"
         }
       }
     },

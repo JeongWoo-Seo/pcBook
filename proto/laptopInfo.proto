@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package pcbook;
+
+option go_package = "github.com/JeongWoo-Seo/pcBook/pb";
+
+import "memory.proto";
+import "network.proto";
+import "google/protobuf/timestamp.proto";
+
+message LaptopInfo {
+    string id = 1;
+    double cpu = 2;
+    MemoryUsage ram = 3;
+    MemoryUsage storages = 4;
+    Network network = 5;
+    uint32 battery = 6;
+    google.protobuf.Timestamp createAt = 7;
+}

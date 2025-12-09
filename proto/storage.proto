@@ -16,3 +16,9 @@ message Storage{
     Driver driver = 1;
     Memory memory = 2;
 }
+
+message StorageUsage{
+    double total_memory = 1;
+    double current_memory = 2;
+    double usage = 3;
+}

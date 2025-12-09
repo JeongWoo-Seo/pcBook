@@ -134,6 +134,66 @@ func (x *Memory) GetUnit() Memory_Unit {
 	return Memory_UNKNOWN
 }
 
+type MemoryUsage struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TotalMemory   float64                `protobuf:"fixed64,1,opt,name=total_memory,json=totalMemory,proto3" json:"total_memory,omitempty"`
+	CurrentMemory float64                `protobuf:"fixed64,2,opt,name=current_memory,json=currentMemory,proto3" json:"current_memory,omitempty"`
+	Usage         float64                `protobuf:"fixed64,3,opt,name=usage,proto3" json:"usage,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MemoryUsage) Reset() {
+	*x = MemoryUsage{}
+	mi := &file_memory_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MemoryUsage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MemoryUsage) ProtoMessage() {}
+
+func (x *MemoryUsage) ProtoReflect() protoreflect.Message {
+	mi := &file_memory_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MemoryUsage.ProtoReflect.Descriptor instead.
+func (*MemoryUsage) Descriptor() ([]byte, []int) {
+	return file_memory_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *MemoryUsage) GetTotalMemory() float64 {
+	if x != nil {
+		return x.TotalMemory
+	}
+	return 0
+}
+
+func (x *MemoryUsage) GetCurrentMemory() float64 {
+	if x != nil {
+		return x.CurrentMemory
+	}
+	return 0
+}
+
+func (x *MemoryUsage) GetUsage() float64 {
+	if x != nil {
+		return x.Usage
+	}
+	return 0
+}
+
 var File_memory_proto protoreflect.FileDescriptor
 
 const file_memory_proto_rawDesc = "" +
@@ -149,7 +209,11 @@ const file_memory_proto_rawDesc = "" +
 	"\bKILOBYTE\x10\x03\x12\f\n" +
 	"\bMEGABYTE\x10\x04\x12\f\n" +
 	"\bGIGABYTE\x10\x05\x12\f\n" +
-	"\bTERABYTE\x10\x06B#Z!github.com/JeongWoo-Seo/pcBook/pbb\x06proto3"
+	"\bTERABYTE\x10\x06\"m\n" +
+	"\vMemoryUsage\x12!\n" +
+	"\ftotal_memory\x18\x01 \x01(\x01R\vtotalMemory\x12%\n" +
+	"\x0ecurrent_memory\x18\x02 \x01(\x01R\rcurrentMemory\x12\x14\n" +
+	"\x05usage\x18\x03 \x01(\x01R\x05usageB#Z!github.com/JeongWoo-Seo/pcBook/pbb\x06proto3"
 
 var (
 	file_memory_proto_rawDescOnce sync.Once
@@ -164,10 +228,11 @@ func file_memory_proto_rawDescGZIP() []byte {
 }
 
 var file_memory_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_memory_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_memory_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_memory_proto_goTypes = []any{
-	(Memory_Unit)(0), // 0: pcbook.Memory.Unit
-	(*Memory)(nil),   // 1: pcbook.Memory
+	(Memory_Unit)(0),    // 0: pcbook.Memory.Unit
+	(*Memory)(nil),      // 1: pcbook.Memory
+	(*MemoryUsage)(nil), // 2: pcbook.MemoryUsage
 }
 var file_memory_proto_depIdxs = []int32{
 	0, // 0: pcbook.Memory.unit:type_name -> pcbook.Memory.Unit
@@ -189,7 +254,7 @@ func file_memory_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_memory_proto_rawDesc), len(file_memory_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   1,
+			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

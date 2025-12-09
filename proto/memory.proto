@@ -18,3 +18,9 @@ message Memory{
     uint64 value = 1;
     Unit unit = 2;
 }
+
+message MemoryUsage{
+    double total_memory = 1;
+    double current_memory = 2;
+    double usage = 3;
+}

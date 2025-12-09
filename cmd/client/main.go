@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sync"
 	"time"
 
 	"github.com/JeongWoo-Seo/pcBook/client"
@@ -15,6 +16,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 const (
@@ -60,8 +62,11 @@ func main() {
 	}
 	laptopClient := client.NewLaptopClient(cc2)
 
-	//testUploadImage(laptopClient)
-	testRatingLaptop(laptopClient)
+	//testRatingLaptop(laptopClient)
+	err = GetPcBookInfo(laptopClient)
+	if err != nil {
+		log.Fatal("failed to get PC info:", err)
+	}
 }
 
 func authmethods() map[string]bool {
@@ -71,6 +76,98 @@ func authmethods() map[string]bool {
 		laptopServicePath + "CreateLaptop": true,
 		laptopServicePath + "UploadImage":  true,
 		laptopServicePath + "RateLaptop":   true,
+	}
+}
+
+func GetPcBookInfo(laptopClient *client.LaptopClient) error {
+	sendQueue := make(chan *pb.LaptopInfo, 100)
+
+	go client.StartSenderWorker(sendQueue)
+
+	defer close(sendQueue)
+	defer time.Sleep(1 * time.Second)
+
+	laptopId, err := laptopClient.GetMacSerialID()
+	if err != nil {
+		return fmt.Errorf("can not get laptop id")
+	}
+
+	for {
+		start := time.Now()
+
+		var wg sync.WaitGroup
+		wg.Add(4)
+
+		result := &pb.LaptopInfo{}
+
+		errs := make(chan error, 4)
+
+		// 정보 수집 - GetCPUInfo 와 GetNetInfo에서 1초 동안 데이터를 수집 for loop는 1초단위로 동작
+		go func() {
+			defer wg.Done()
+			info, err := laptopClient.GetBatteryInfo()
+			if err != nil {
+				errs <- fmt.Errorf("battery info failed: %w", err)
+				return
+			}
+			result.Battery = info
+		}()
+
+		go func() {
+			defer wg.Done()
+			info, err := laptopClient.GetCPUInfo()
+			if err != nil {
+				errs <- fmt.Errorf("cpu info failed: %w", err)
+				return
+			}
+			result.Cpu = info
+		}()
+
+		go func() {
+			defer wg.Done()
+			ram, storage, err := laptopClient.GetMemoryInfo()
+			if err != nil {
+				errs <- fmt.Errorf("ram/disk info failed: %w", err)
+				return
+			}
+			result.Ram = ram
+			result.Storages = storage
+		}()
+
+		go func() {
+			defer wg.Done()
+			info, err := laptopClient.GetNetInfo()
+			if err != nil {
+				errs <- fmt.Errorf("net info failed: %w", err)
+				return
+			}
+			result.Network = info
+		}()
+
+		wg.Wait() // 1초 단위로 정보 수집
+		close(errs)
+
+		// error
+		for err := range errs {
+			log.Printf("System info collection error: %v", err)
+			time.Sleep(1 * time.Second)
+			continue
+		}
+
+		result.Id = laptopId
+		result.CreateAt = timestamppb.Now()
+
+		elapsed := time.Since(start)
+
+		fmt.Printf("\n===== 수집 완료 (%s) =====\n", elapsed)
+		fmt.Printf("laptop id: %s\n", result.GetId())
+		fmt.Printf("Battery: %d\n", result.GetBattery())
+		fmt.Printf("CPU: %f\n", result.GetCpu())
+		fmt.Printf("RAM: %s\n", result.GetRam())
+		fmt.Printf("storage: %s\n", result.GetStorages())
+		fmt.Printf("Net: rx: %d,tx: %d\n", result.GetNetwork().GetRx(), result.GetNetwork().GetTx())
+
+		sendQueue <- result
 	}
 }
 

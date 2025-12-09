@@ -496,11 +496,99 @@ func (x *RateLaptopResponse) GetAverageScore() float64 {
 	return 0
 }
 
+type SendLaptopInfoRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Laptop        *LaptopInfo            `protobuf:"bytes,1,opt,name=laptop,proto3" json:"laptop,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SendLaptopInfoRequest) Reset() {
+	*x = SendLaptopInfoRequest{}
+	mi := &file_laptop_service_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SendLaptopInfoRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SendLaptopInfoRequest) ProtoMessage() {}
+
+func (x *SendLaptopInfoRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_laptop_service_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SendLaptopInfoRequest.ProtoReflect.Descriptor instead.
+func (*SendLaptopInfoRequest) Descriptor() ([]byte, []int) {
+	return file_laptop_service_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *SendLaptopInfoRequest) GetLaptop() *LaptopInfo {
+	if x != nil {
+		return x.Laptop
+	}
+	return nil
+}
+
+type SendLaptopInfoResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Msg           string                 `protobuf:"bytes,1,opt,name=msg,proto3" json:"msg,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SendLaptopInfoResponse) Reset() {
+	*x = SendLaptopInfoResponse{}
+	mi := &file_laptop_service_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SendLaptopInfoResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SendLaptopInfoResponse) ProtoMessage() {}
+
+func (x *SendLaptopInfoResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_laptop_service_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SendLaptopInfoResponse.ProtoReflect.Descriptor instead.
+func (*SendLaptopInfoResponse) Descriptor() ([]byte, []int) {
+	return file_laptop_service_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *SendLaptopInfoResponse) GetMsg() string {
+	if x != nil {
+		return x.Msg
+	}
+	return ""
+}
+
 var File_laptop_service_proto protoreflect.FileDescriptor
 
 const file_laptop_service_proto_rawDesc = "" +
 	"\n" +
-	"\x14laptop_service.proto\x12\x06pcbook\x1a\flaptop.proto\x1a\ffilter.proto\x1a\x1cgoogle/api/annotations.proto\"=\n" +
+	"\x14laptop_service.proto\x12\x06pcbook\x1a\flaptop.proto\x1a\ffilter.proto\x1a\x10laptopInfo.proto\x1a\x1cgoogle/api/annotations.proto\"=\n" +
 	"\x13CreateLaptopRequest\x12&\n" +
 	"\x06laptop\x18\x01 \x01(\v2\x0e.pcbook.LaptopR\x06laptop\"&\n" +
 	"\x14CreateLaptopResponse\x12\x0e\n" +
@@ -528,13 +616,18 @@ const file_laptop_service_proto_rawDesc = "" +
 	"\tlaptop_id\x18\x01 \x01(\tR\blaptopId\x12\x1f\n" +
 	"\vrated_count\x18\x02 \x01(\rR\n" +
 	"ratedCount\x12#\n" +
-	"\raverage_score\x18\x03 \x01(\x01R\faverageScore2\xa7\x03\n" +
+	"\raverage_score\x18\x03 \x01(\x01R\faverageScore\"C\n" +
+	"\x15SendLaptopInfoRequest\x12*\n" +
+	"\x06laptop\x18\x01 \x01(\v2\x12.pcbook.LaptopInfoR\x06laptop\"*\n" +
+	"\x16SendLaptopInfoResponse\x12\x10\n" +
+	"\x03msg\x18\x01 \x01(\tR\x03msg2\x98\x04\n" +
 	"\rLaptopService\x12d\n" +
 	"\fCreateLaptop\x12\x1b.pcbook.CreateLaptopRequest\x1a\x1c.pcbook.CreateLaptopResponse\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*\"\x0e/laptop/create\x12c\n" +
 	"\fSearchLaptop\x12\x1b.pcbook.SearchLaptopRequest\x1a\x1c.pcbook.SearchLaptopResponse\"\x16\x82\xd3\xe4\x93\x02\x10\x12\x0e/laptop/search0\x01\x12i\n" +
 	"\vUploadImage\x12\x1a.pcbook.UploadImageRequest\x1a\x1b.pcbook.UploadImageResponse\"\x1f\x82\xd3\xe4\x93\x02\x19:\x01*\"\x14/laptop/uplaod_image(\x01\x12`\n" +
 	"\n" +
-	"RateLaptop\x12\x19.pcbook.RateLaptopRequest\x1a\x1a.pcbook.RateLaptopResponse\"\x17\x82\xd3\xe4\x93\x02\x11:\x01*\"\f/laptop/rate(\x010\x01B#Z!github.com/JeongWoo-Seo/pcBook/pbb\x06proto3"
+	"RateLaptop\x12\x19.pcbook.RateLaptopRequest\x1a\x1a.pcbook.RateLaptopResponse\"\x17\x82\xd3\xe4\x93\x02\x11:\x01*\"\f/laptop/rate(\x010\x01\x12o\n" +
+	"\x0eSendLaptopInfo\x12\x1d.pcbook.SendLaptopInfoRequest\x1a\x1e.pcbook.SendLaptopInfoResponse\"\x1c\x82\xd3\xe4\x93\x02\x16:\x01*\"\x11/laptop/send_info(\x01B#Z!github.com/JeongWoo-Seo/pcBook/pbb\x06proto3"
 
 var (
 	file_laptop_service_proto_rawDescOnce sync.Once
@@ -548,38 +641,44 @@ func file_laptop_service_proto_rawDescGZIP() []byte {
 	return file_laptop_service_proto_rawDescData
 }
 
-var file_laptop_service_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_laptop_service_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_laptop_service_proto_goTypes = []any{
-	(*CreateLaptopRequest)(nil),  // 0: pcbook.CreateLaptopRequest
-	(*CreateLaptopResponse)(nil), // 1: pcbook.CreateLaptopResponse
-	(*SearchLaptopRequest)(nil),  // 2: pcbook.SearchLaptopRequest
-	(*SearchLaptopResponse)(nil), // 3: pcbook.SearchLaptopResponse
-	(*UploadImageRequest)(nil),   // 4: pcbook.UploadImageRequest
-	(*ImageInfo)(nil),            // 5: pcbook.ImageInfo
-	(*UploadImageResponse)(nil),  // 6: pcbook.UploadImageResponse
-	(*RateLaptopRequest)(nil),    // 7: pcbook.RateLaptopRequest
-	(*RateLaptopResponse)(nil),   // 8: pcbook.RateLaptopResponse
-	(*Laptop)(nil),               // 9: pcbook.Laptop
-	(*Filter)(nil),               // 10: pcbook.Filter
+	(*CreateLaptopRequest)(nil),    // 0: pcbook.CreateLaptopRequest
+	(*CreateLaptopResponse)(nil),   // 1: pcbook.CreateLaptopResponse
+	(*SearchLaptopRequest)(nil),    // 2: pcbook.SearchLaptopRequest
+	(*SearchLaptopResponse)(nil),   // 3: pcbook.SearchLaptopResponse
+	(*UploadImageRequest)(nil),     // 4: pcbook.UploadImageRequest
+	(*ImageInfo)(nil),              // 5: pcbook.ImageInfo
+	(*UploadImageResponse)(nil),    // 6: pcbook.UploadImageResponse
+	(*RateLaptopRequest)(nil),      // 7: pcbook.RateLaptopRequest
+	(*RateLaptopResponse)(nil),     // 8: pcbook.RateLaptopResponse
+	(*SendLaptopInfoRequest)(nil),  // 9: pcbook.SendLaptopInfoRequest
+	(*SendLaptopInfoResponse)(nil), // 10: pcbook.SendLaptopInfoResponse
+	(*Laptop)(nil),                 // 11: pcbook.Laptop
+	(*Filter)(nil),                 // 12: pcbook.Filter
+	(*LaptopInfo)(nil),             // 13: pcbook.LaptopInfo
 }
 var file_laptop_service_proto_depIdxs = []int32{
-	9,  // 0: pcbook.CreateLaptopRequest.laptop:type_name -> pcbook.Laptop
-	10, // 1: pcbook.SearchLaptopRequest.filter:type_name -> pcbook.Filter
-	9,  // 2: pcbook.SearchLaptopResponse.laptop:type_name -> pcbook.Laptop
+	11, // 0: pcbook.CreateLaptopRequest.laptop:type_name -> pcbook.Laptop
+	12, // 1: pcbook.SearchLaptopRequest.filter:type_name -> pcbook.Filter
+	11, // 2: pcbook.SearchLaptopResponse.laptop:type_name -> pcbook.Laptop
 	5,  // 3: pcbook.UploadImageRequest.info:type_name -> pcbook.ImageInfo
-	0,  // 4: pcbook.LaptopService.CreateLaptop:input_type -> pcbook.CreateLaptopRequest
-	2,  // 5: pcbook.LaptopService.SearchLaptop:input_type -> pcbook.SearchLaptopRequest
-	4,  // 6: pcbook.LaptopService.UploadImage:input_type -> pcbook.UploadImageRequest
-	7,  // 7: pcbook.LaptopService.RateLaptop:input_type -> pcbook.RateLaptopRequest
-	1,  // 8: pcbook.LaptopService.CreateLaptop:output_type -> pcbook.CreateLaptopResponse
-	3,  // 9: pcbook.LaptopService.SearchLaptop:output_type -> pcbook.SearchLaptopResponse
-	6,  // 10: pcbook.LaptopService.UploadImage:output_type -> pcbook.UploadImageResponse
-	8,  // 11: pcbook.LaptopService.RateLaptop:output_type -> pcbook.RateLaptopResponse
-	8,  // [8:12] is the sub-list for method output_type
-	4,  // [4:8] is the sub-list for method input_type
-	4,  // [4:4] is the sub-list for extension type_name
-	4,  // [4:4] is the sub-list for extension extendee
-	0,  // [0:4] is the sub-list for field type_name
+	13, // 4: pcbook.SendLaptopInfoRequest.laptop:type_name -> pcbook.LaptopInfo
+	0,  // 5: pcbook.LaptopService.CreateLaptop:input_type -> pcbook.CreateLaptopRequest
+	2,  // 6: pcbook.LaptopService.SearchLaptop:input_type -> pcbook.SearchLaptopRequest
+	4,  // 7: pcbook.LaptopService.UploadImage:input_type -> pcbook.UploadImageRequest
+	7,  // 8: pcbook.LaptopService.RateLaptop:input_type -> pcbook.RateLaptopRequest
+	9,  // 9: pcbook.LaptopService.SendLaptopInfo:input_type -> pcbook.SendLaptopInfoRequest
+	1,  // 10: pcbook.LaptopService.CreateLaptop:output_type -> pcbook.CreateLaptopResponse
+	3,  // 11: pcbook.LaptopService.SearchLaptop:output_type -> pcbook.SearchLaptopResponse
+	6,  // 12: pcbook.LaptopService.UploadImage:output_type -> pcbook.UploadImageResponse
+	8,  // 13: pcbook.LaptopService.RateLaptop:output_type -> pcbook.RateLaptopResponse
+	10, // 14: pcbook.LaptopService.SendLaptopInfo:output_type -> pcbook.SendLaptopInfoResponse
+	10, // [10:15] is the sub-list for method output_type
+	5,  // [5:10] is the sub-list for method input_type
+	5,  // [5:5] is the sub-list for extension type_name
+	5,  // [5:5] is the sub-list for extension extendee
+	0,  // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_laptop_service_proto_init() }
@@ -589,6 +688,7 @@ func file_laptop_service_proto_init() {
 	}
 	file_laptop_proto_init()
 	file_filter_proto_init()
+	file_laptopInfo_proto_init()
 	file_laptop_service_proto_msgTypes[4].OneofWrappers = []any{
 		(*UploadImageRequest_Info)(nil),
 		(*UploadImageRequest_ChunkData)(nil),
@@ -599,7 +699,7 @@ func file_laptop_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_laptop_service_proto_rawDesc), len(file_laptop_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   9,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
