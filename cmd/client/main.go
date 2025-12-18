@@ -82,7 +82,7 @@ func authmethods() map[string]bool {
 func GetPcBookInfo(laptopClient *client.LaptopClient) error {
 	sendQueue := make(chan *pb.LaptopInfo, 100)
 
-	go client.StartSenderWorker(sendQueue)
+	go client.StartSenderWorker(laptopClient, sendQueue)
 
 	defer close(sendQueue)
 	defer time.Sleep(1 * time.Second)

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"fmt"
 	"io"
 	"log"
 
@@ -164,7 +165,6 @@ func (s *LaptopServer) UploadImage(stream grpc.ClientStreamingServer[pb.UploadIm
 }
 
 func (s *LaptopServer) RateLaptop(stream grpc.BidiStreamingServer[pb.RateLaptopRequest, pb.RateLaptopResponse]) error {
-
 	for {
 		if err := contextError(stream.Context()); err != nil {
 			return err
@@ -207,6 +207,38 @@ func (s *LaptopServer) RateLaptop(stream grpc.BidiStreamingServer[pb.RateLaptopR
 			return logErr(status.Errorf(codes.Unknown, "can not send stream: %v", err))
 		}
 	}
+	return nil
+}
+
+func (s *LaptopServer) SendLaptopInfo(stream grpc.ClientStreamingServer[pb.SendLaptopInfoRequest, pb.SendLaptopInfoResponse]) error {
+	if err := contextError(stream.Context()); err != nil {
+		return err
+	}
+	var totalRecieved int
+
+	for {
+		req, err := stream.Recv()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return logErr(status.Errorf(codes.Unknown, "can not recieve laptop info data: %v", err))
+		}
+
+		log.Printf("Recieved laptop info: %v", req.GetLaptop())
+		// ... redis //큐에 삽입 로직 실행 ...
+		totalRecieved++
+	}
+
+	res := &pb.SendLaptopInfoResponse{
+		Msg: fmt.Sprintf("finished receiving %d laptop infos.", totalRecieved),
+	}
+
+	err := stream.SendAndClose(res)
+	if err != nil {
+		return logErr(status.Errorf(codes.Unknown, "failed to send res: %v", err))
+	}
+
 	return nil
 }
 

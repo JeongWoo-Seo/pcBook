@@ -1,7 +1,9 @@
 package client
 
 import (
+	"context"
 	"fmt"
+	"log"
 	"os/exec"
 	"strconv"
 	"strings"
@@ -14,14 +16,39 @@ import (
 	"github.com/shirou/gopsutil/net"
 )
 
-func SendToServer(info *pb.LaptopInfo) {
-	time.Sleep(200 * time.Millisecond) // 서버 지연 시뮬레이션
-}
+func StartSenderWorker(laptopClient *LaptopClient, queue <-chan *pb.LaptopInfo) {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
-func StartSenderWorker(queue <-chan *pb.LaptopInfo) {
-	for info := range queue {
-		SendToServer(info)
+	stream, err := laptopClient.service.SendLaptopInfo(ctx)
+	if err != nil {
+		log.Printf("Failed to open stream: %v", err)
+		return
 	}
+
+	log.Println("Sender worker started...")
+
+	for info := range queue {
+		req := &pb.SendLaptopInfoRequest{
+			Laptop: info,
+		}
+
+		err := stream.Send(req)
+		if err != nil {
+			log.Printf("Error while sending to stream: %v", err)
+			break
+		}
+		log.Printf("Sent laptop info: %s", info.GetId())
+	}
+
+	res, err := stream.CloseAndRecv()
+	if err != nil {
+		log.Printf("Error while receiving final response: %v", err)
+		return
+	}
+
+	log.Printf("Final Server Response: %s", res.GetMsg())
+	log.Println("Sender worker finished successfully.")
 }
 
 func (laptopClient *LaptopClient) GetBatteryInfo() (uint32, error) {
