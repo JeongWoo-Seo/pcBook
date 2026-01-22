@@ -9,7 +9,10 @@ import (
 	"log"
 
 	"github.com/JeongWoo-Seo/pcBook/pb"
+	"github.com/JeongWoo-Seo/pcBook/redisutil"
 	"github.com/google/uuid"
+	"github.com/redis/go-redis/v9"
+
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -24,6 +27,7 @@ type LaptopServer struct {
 	LaptopStore LaptopStore
 	ImageStore  ImageStore
 	RatingStore RatingStore
+	RDB         *redis.Client
 }
 
 func NewLaptopServer(laptopStore LaptopStore, imageStore ImageStore, ratingStore RatingStore) *LaptopServer {
@@ -211,7 +215,8 @@ func (s *LaptopServer) RateLaptop(stream grpc.BidiStreamingServer[pb.RateLaptopR
 }
 
 func (s *LaptopServer) SendLaptopInfo(stream grpc.ClientStreamingServer[pb.SendLaptopInfoRequest, pb.SendLaptopInfoResponse]) error {
-	if err := contextError(stream.Context()); err != nil {
+	ctx := stream.Context()
+	if err := contextError(ctx); err != nil {
 		return err
 	}
 	var totalRecieved int
@@ -226,7 +231,12 @@ func (s *LaptopServer) SendLaptopInfo(stream grpc.ClientStreamingServer[pb.SendL
 		}
 
 		log.Printf("Recieved laptop info: %v", req.GetLaptop())
-		// ... redis //큐에 삽입 로직 실행 ...
+
+		err = redisutil.PublishToRedis(ctx, s.RDB, req.GetLaptop())
+		if err != nil {
+			log.Printf("Warning: Failed to publish to Redis: %v", err)
+		}
+
 		totalRecieved++
 	}
 

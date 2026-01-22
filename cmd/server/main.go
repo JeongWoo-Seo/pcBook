@@ -12,6 +12,7 @@ import (
 	"os"
 
 	"github.com/JeongWoo-Seo/pcBook/pb"
+	"github.com/JeongWoo-Seo/pcBook/redisutil"
 	"github.com/JeongWoo-Seo/pcBook/service"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
@@ -32,6 +33,15 @@ func main() {
 	endPoint := flag.String("endpoint", "", "grpc endpoint")
 	flag.Parse()
 
+	// =========================
+	// Redis 설정
+	// =========================
+	rdb := redisutil.NewRedisClient()
+	defer rdb.Close()
+
+	// =========================
+	// Auth
+	// =========================
 	userStore := service.NewInMemoryUserStore()
 	tokenManager := service.NewPasetoManager(service.TokenKey, service.TokenDuration)
 	authServer := service.NewAuthServer(userStore, tokenManager)
@@ -40,11 +50,17 @@ func main() {
 		log.Fatal("can not seed user")
 	}
 
+	// =========================
+	// Laptop server
+	// =========================
 	laptopStore := service.NewInMemoryLaptopStore()
 	imageStore := service.NewDiskImageStore("tmp")
 	ratingStore := service.NewInMemoryRatingStore()
 	laptopServer := service.NewLaptopServer(laptopStore, imageStore, ratingStore)
 
+	// =========================
+	// Network
+	// =========================
 	address := fmt.Sprintf("0.0.0.0:%d", *port)
 	listener, err := net.Listen("tcp", address)
 	if err != nil {
