@@ -30,11 +30,12 @@ type LaptopServer struct {
 	RDB         *redis.Client
 }
 
-func NewLaptopServer(laptopStore LaptopStore, imageStore ImageStore, ratingStore RatingStore) *LaptopServer {
+func NewLaptopServer(laptopStore LaptopStore, imageStore ImageStore, ratingStore RatingStore, rdb *redis.Client) *LaptopServer {
 	return &LaptopServer{
 		LaptopStore: laptopStore,
 		ImageStore:  imageStore,
 		RatingStore: ratingStore,
+		RDB:         rdb,
 	}
 }
 
@@ -230,7 +231,7 @@ func (s *LaptopServer) SendLaptopInfo(stream grpc.ClientStreamingServer[pb.SendL
 			return logErr(status.Errorf(codes.Unknown, "can not recieve laptop info data: %v", err))
 		}
 
-		log.Printf("Recieved laptop info: %v", req.GetLaptop())
+		log.Printf("Recieved laptop info to client : id = %v", req.GetLaptop().GetId())
 
 		err = redisutil.PublishToRedis(ctx, s.RDB, req.GetLaptop())
 		if err != nil {

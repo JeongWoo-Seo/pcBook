@@ -40,13 +40,16 @@ func handleWebSockets(rdb *redis.Client, w http.ResponseWriter, r *http.Request)
 	}
 }
 
-func main() {
-	rdb := NewRedisClient()
+func StartRedisSubTest(ctx context.Context, rdb *redis.Client) {
+	sub := rdb.Subscribe(ctx, "laptop-updates")
 
-	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
-		handleWebSockets(rdb, w, r)
-	})
+	go func() {
+		ch := sub.Channel()
 
-	log.Println("WebSocket server started on :8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+		log.Println("[Redis-TEST] subscribed to laptop-updates")
+
+		for msg := range ch {
+			log.Printf("[Redis-TEST] received message: %s\n", msg.Payload)
+		}
+	}()
 }

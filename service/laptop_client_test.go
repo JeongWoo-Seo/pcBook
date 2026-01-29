@@ -44,7 +44,7 @@ func TestLaptopClient(t *testing.T) {
 }
 
 func startTestLaptopServer(t *testing.T, laptopStore LaptopStore, imageStore ImageStore, ratingStore RatingStore) string {
-	laptopServer := NewLaptopServer(laptopStore, imageStore, ratingStore)
+	laptopServer := NewLaptopServer(laptopStore, imageStore, ratingStore, nil)
 
 	grpcServer := grpc.NewServer()
 	pb.RegisterLaptopServiceServer(grpcServer, laptopServer)

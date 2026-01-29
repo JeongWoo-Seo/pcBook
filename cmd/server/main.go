@@ -56,7 +56,7 @@ func main() {
 	laptopStore := service.NewInMemoryLaptopStore()
 	imageStore := service.NewDiskImageStore("tmp")
 	ratingStore := service.NewInMemoryRatingStore()
-	laptopServer := service.NewLaptopServer(laptopStore, imageStore, ratingStore)
+	laptopServer := service.NewLaptopServer(laptopStore, imageStore, ratingStore, rdb)
 
 	// =========================
 	// Network
