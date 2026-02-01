@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"time"
 
 	"github.com/JeongWoo-Seo/pcBook/pb"
 	"github.com/JeongWoo-Seo/pcBook/redisutil"
@@ -214,28 +215,56 @@ func (s *LaptopServer) RateLaptop(stream grpc.BidiStreamingServer[pb.RateLaptopR
 	}
 	return nil
 }
+func (s *LaptopServer) SendLaptopInfo(
+	stream grpc.ClientStreamingServer[
+		pb.SendLaptopInfoRequest,
+		pb.SendLaptopInfoResponse,
+	],
+) error {
 
-func (s *LaptopServer) SendLaptopInfo(stream grpc.ClientStreamingServer[pb.SendLaptopInfoRequest, pb.SendLaptopInfoResponse]) error {
 	ctx := stream.Context()
 	if err := contextError(ctx); err != nil {
 		return err
 	}
+
 	var totalRecieved int
+	var lastHeartbeat time.Time
 
 	for {
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		default:
+		}
+
 		req, err := stream.Recv()
 		if err == io.EOF {
 			break
 		}
 		if err != nil {
-			return logErr(status.Errorf(codes.Unknown, "can not recieve laptop info data: %v", err))
+			return logErr(status.Errorf(
+				codes.Unknown,
+				"can not receive laptop info data: %v",
+				err,
+			))
 		}
 
-		log.Printf("Recieved laptop info to client : id = %v", req.GetLaptop().GetId())
+		laptop := req.GetLaptop()
+		laptopID := laptop.GetId()
 
-		err = redisutil.PublishToRedis(ctx, s.RDB, req.GetLaptop())
-		if err != nil {
-			log.Printf("Warning: Failed to publish to Redis: %v", err)
+		log.Printf("Received laptop info: id=%s", laptopID)
+
+		// 🔥 1️⃣ heartbeat는 5초에 1번만
+		if time.Since(lastHeartbeat) >= 5*time.Second {
+			if err := redisutil.UpdateLaptopHeartbeat(ctx, s.RDB, laptopID); err != nil {
+				log.Printf("redis heartbeat error: %v", err)
+			}
+			lastHeartbeat = time.Now()
+		}
+
+		// 2️⃣ 실시간 데이터는 계속 publish
+		if err := redisutil.PublishToRedis(ctx, s.RDB, laptop); err != nil {
+			log.Printf("redis publish error: %v", err)
 		}
 
 		totalRecieved++
@@ -245,9 +274,12 @@ func (s *LaptopServer) SendLaptopInfo(stream grpc.ClientStreamingServer[pb.SendL
 		Msg: fmt.Sprintf("finished receiving %d laptop infos.", totalRecieved),
 	}
 
-	err := stream.SendAndClose(res)
-	if err != nil {
-		return logErr(status.Errorf(codes.Unknown, "failed to send res: %v", err))
+	if err := stream.SendAndClose(res); err != nil {
+		return logErr(status.Errorf(
+			codes.Unknown,
+			"failed to send response: %v",
+			err,
+		))
 	}
 
 	return nil
