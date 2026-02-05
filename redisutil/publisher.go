@@ -33,6 +33,6 @@ func PublishToRedis(ctx context.Context, rdb *redis.Client, info *pb.LaptopInfo)
 		return err
 	}
 
-	err = rdb.Publish(ctx, "laptop-updates", data).Err()
+	err = rdb.Publish(ctx, "laptop-metrics", data).Err()
 	return err
 }
