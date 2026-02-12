@@ -27,12 +27,12 @@ func NewRedisClient() *redis.Client {
 	return rdb
 }
 
-func PublishToRedis(ctx context.Context, rdb *redis.Client, info *pb.LaptopInfo) error {
-	data, err := json.Marshal(info)
+func PublishToRedis(ctx context.Context, rdb *redis.Client, laptop *pb.LaptopInfo) error {
+	data, err := json.Marshal(laptop)
 	if err != nil {
 		return err
 	}
 
-	err = rdb.Publish(ctx, "laptop-metrics", data).Err()
-	return err
+	channel := "laptop:" + laptop.GetId() + ":metrics"
+	return rdb.Publish(ctx, channel, data).Err()
 }
