@@ -10,6 +10,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/JeongWoo-Seo/pcBook/pb"
 	"github.com/JeongWoo-Seo/pcBook/redisutil"
@@ -38,6 +39,7 @@ func main() {
 	// =========================
 	rdb := redisutil.NewRedisClient()
 	defer rdb.Close()
+	redisutil.StartCleanup(context.Background(), rdb, 5*time.Second, 10)
 
 	// =========================
 	// Auth

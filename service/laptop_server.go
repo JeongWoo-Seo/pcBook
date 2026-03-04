@@ -254,7 +254,7 @@ func (s *LaptopServer) SendLaptopInfo(
 
 		log.Printf("Received laptop info: id=%s", laptopID)
 
-		// 🔥 1️⃣ heartbeat는 5초에 1번만
+		//heartbeat는 5초에 1번만
 		if time.Since(lastHeartbeat) >= 5*time.Second {
 			if err := redisutil.UpdateLaptopHeartbeat(ctx, s.RDB, laptopID); err != nil {
 				log.Printf("redis heartbeat error: %v", err)
@@ -262,7 +262,6 @@ func (s *LaptopServer) SendLaptopInfo(
 			lastHeartbeat = time.Now()
 		}
 
-		// 2️⃣ 실시간 데이터는 계속 publish
 		if err := redisutil.PublishToRedis(ctx, s.RDB, laptop); err != nil {
 			log.Printf("redis publish error: %v", err)
 		}
