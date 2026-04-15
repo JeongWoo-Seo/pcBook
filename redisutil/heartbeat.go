@@ -12,15 +12,31 @@ import (
 func UpdateLaptopHeartbeat(ctx context.Context, rdb *redis.Client, laptopID string) error {
 	now := time.Now().Unix()
 
-	err := rdb.ZAdd(ctx, "laptop:alive", redis.Z{
-		Score:  float64(now),
-		Member: laptopID,
-	}).Err()
-	if err != nil {
-		return err
-	}
+	retryTime := 500 * time.Millisecond
 
-	return nil
+	for {
+		err := rdb.ZAdd(ctx, "laptop:alive", redis.Z{
+			Score:  float64(now),
+			Member: laptopID,
+		}).Err()
+
+		if err == nil {
+			return nil
+		}
+
+		if ctx.Err() != nil {
+			return ctx.Err()
+		}
+
+		log.Println("heartbeat failed:", err)
+
+		time.Sleep(withJitter(retryTime))
+
+		retryTime *= 2
+		if retryTime > 5*time.Second {
+			retryTime = 5 * time.Second
+		}
+	}
 }
 
 func StartCleanup(ctx context.Context, rdb *redis.Client, tick time.Duration, expire int64) {

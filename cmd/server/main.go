@@ -39,7 +39,7 @@ func main() {
 	// =========================
 	rdb := redisutil.NewRedisClient()
 	defer rdb.Close()
-	redisutil.StartCleanup(context.Background(), rdb, 5*time.Second, 10)
+	redisutil.StartCleanup(context.Background(), rdb, 5*time.Second, 15)
 
 	// =========================
 	// Auth

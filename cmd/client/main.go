@@ -161,12 +161,12 @@ func GetPcBookInfo(laptopClient *client.LaptopClient) error {
 
 		fmt.Printf("\n===== 수집 완료 (%s) =====\n", elapsed)
 		fmt.Printf("laptop id: %s\n", result.GetId())
-		fmt.Printf("Battery: %d\n", result.GetBattery())
+		/*fmt.Printf("Battery: %d\n", result.GetBattery())
 		fmt.Printf("CPU: %f\n", result.GetCpu())
 		fmt.Printf("RAM: %s\n", result.GetRam())
 		fmt.Printf("storage: %s\n", result.GetStorages())
 		fmt.Printf("Net: rx: %d,tx: %d\n", result.GetNetwork().GetRx(), result.GetNetwork().GetTx())
-
+		*/
 		sendQueue <- result
 	}
 }
