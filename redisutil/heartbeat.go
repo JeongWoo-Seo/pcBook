@@ -9,37 +9,28 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-func UpdateLaptopHeartbeat(ctx context.Context, rdb *redis.Client, laptopID string) error {
+func UpdateLaptopHeartbeat(ctx context.Context, rm *RedisManager, laptopID string) error {
+	if err := rm.AllowRequest(); err != nil {
+		return err
+	}
+
 	now := time.Now().Unix()
 
-	retryTime := 500 * time.Millisecond
+	err := rm.Client.ZAdd(ctx, "laptop:alive", redis.Z{
+		Score:  float64(now),
+		Member: laptopID,
+	}).Err()
 
-	for {
-		err := rdb.ZAdd(ctx, "laptop:alive", redis.Z{
-			Score:  float64(now),
-			Member: laptopID,
-		}).Err()
-
-		if err == nil {
-			return nil
-		}
-
-		if ctx.Err() != nil {
-			return ctx.Err()
-		}
-
-		log.Println("heartbeat failed:", err)
-
-		time.Sleep(withJitter(retryTime))
-
-		retryTime *= 2
-		if retryTime > 5*time.Second {
-			retryTime = 5 * time.Second
-		}
+	if err != nil {
+		rm.connectionFailure(err)
+		return err
 	}
+
+	rm.connectionSuccess()
+	return nil
 }
 
-func StartCleanup(ctx context.Context, rdb *redis.Client, tick time.Duration, expire int64) {
+func StartCleanup(ctx context.Context, rm *RedisManager, tick time.Duration, expire int64) {
 	ticker := time.NewTicker(tick)
 
 	go func() {
@@ -48,9 +39,13 @@ func StartCleanup(ctx context.Context, rdb *redis.Client, tick time.Duration, ex
 		for {
 			select {
 			case <-ticker.C:
+				if err := rm.AllowRequest(); err != nil {
+					continue
+				}
+
 				now := time.Now().Unix()
 
-				err := rdb.ZRemRangeByScore( //min,max 값은 문자열로 입력하고 redis 내부에서는 float 형태로 처리됨
+				err := rm.Client.ZRemRangeByScore( //min,max 값은 문자열로 입력하고 redis 내부에서는 float 형태로 처리됨
 					ctx,
 					"laptop:alive",
 					"-inf",
@@ -58,8 +53,12 @@ func StartCleanup(ctx context.Context, rdb *redis.Client, tick time.Duration, ex
 				).Err()
 
 				if err != nil {
+					rm.connectionFailure(err)
 					log.Println("cleanup error:", err)
+					continue
 				}
+
+				rm.connectionSuccess()
 
 			case <-ctx.Done():
 				return

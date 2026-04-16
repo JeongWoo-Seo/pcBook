@@ -12,7 +12,6 @@ import (
 	"github.com/JeongWoo-Seo/pcBook/pb"
 	"github.com/JeongWoo-Seo/pcBook/redisutil"
 	"github.com/google/uuid"
-	"github.com/redis/go-redis/v9"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -28,15 +27,15 @@ type LaptopServer struct {
 	LaptopStore LaptopStore
 	ImageStore  ImageStore
 	RatingStore RatingStore
-	RDB         *redis.Client
+	RDB         *redisutil.RedisManager
 }
 
-func NewLaptopServer(laptopStore LaptopStore, imageStore ImageStore, ratingStore RatingStore, rdb *redis.Client) *LaptopServer {
+func NewLaptopServer(laptopStore LaptopStore, imageStore ImageStore, ratingStore RatingStore, rm *redisutil.RedisManager) *LaptopServer {
 	return &LaptopServer{
 		LaptopStore: laptopStore,
 		ImageStore:  imageStore,
 		RatingStore: ratingStore,
-		RDB:         rdb,
+		RDB:         rm,
 	}
 }
 
@@ -215,6 +214,7 @@ func (s *LaptopServer) RateLaptop(stream grpc.BidiStreamingServer[pb.RateLaptopR
 	}
 	return nil
 }
+
 func (s *LaptopServer) SendLaptopInfo(
 	stream grpc.ClientStreamingServer[
 		pb.SendLaptopInfoRequest,
@@ -257,13 +257,17 @@ func (s *LaptopServer) SendLaptopInfo(
 		//heartbeat는 5초에 1번만
 		if time.Since(lastHeartbeat) >= 5*time.Second {
 			if err := redisutil.UpdateLaptopHeartbeat(ctx, s.RDB, laptopID); err != nil {
-				log.Printf("redis heartbeat error: %v", err)
+				if !errors.Is(err, redisutil.ErrRedisOpenCircuit) {
+					log.Printf("redis heartbeat error: %v", err)
+				}
 			}
 			lastHeartbeat = time.Now()
 		}
 
 		if err := redisutil.PublishToRedis(ctx, s.RDB, laptop); err != nil {
-			log.Printf("redis publish error: %v", err)
+			if !errors.Is(err, redisutil.ErrRedisOpenCircuit) {
+				log.Printf("redis publish error: %v", err)
+			}
 		}
 
 		totalRecieved++

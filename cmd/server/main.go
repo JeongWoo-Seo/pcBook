@@ -37,9 +37,10 @@ func main() {
 	// =========================
 	// Redis 설정
 	// =========================
-	rdb := redisutil.NewRedisClient()
-	defer rdb.Close()
-	redisutil.StartCleanup(context.Background(), rdb, 5*time.Second, 15)
+	rm := redisutil.NewRedisManager()
+	defer rm.Client.Close()
+	rm.StartRedisMonitor(context.Background(), 10*time.Second)
+	redisutil.StartCleanup(context.Background(), rm, 5*time.Second, 15)
 
 	// =========================
 	// Auth
@@ -58,7 +59,7 @@ func main() {
 	laptopStore := service.NewInMemoryLaptopStore()
 	imageStore := service.NewDiskImageStore("tmp")
 	ratingStore := service.NewInMemoryRatingStore()
-	laptopServer := service.NewLaptopServer(laptopStore, imageStore, ratingStore, rdb)
+	laptopServer := service.NewLaptopServer(laptopStore, imageStore, ratingStore, rm)
 
 	// =========================
 	// Network
